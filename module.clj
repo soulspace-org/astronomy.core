@@ -1,5 +1,5 @@
 [
- :module "CljAstronomyLibrary"
+ :module "astronomy.core"
  :project "org.soulspace.clj"
  :type :library
  :version "0.4.0-SNAPSHOT"
