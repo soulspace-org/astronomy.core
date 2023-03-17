@@ -10,9 +10,9 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 (ns org.soulspace.clj.astronomy.nutation
-  (:require [org.soulspace.math.core :as m])
-  (:use [org.soulspace.clj.astronomy.time time instant]
-        [org.soulspace.clj.astronomy.angle]))
+  (:require [org.soulspace.math.core :as m]
+            [org.soulspace.clj.astronomy.time :as time]
+            [org.soulspace.clj.astronomy.angle :as angle]))
 
 ;;;
 ;;; Functions for the calculation nutation and the obliquity of the ecliptic.
@@ -62,7 +62,7 @@
   "Calculates the nutation in longitude (delta psi) in arc seconds for the
   julian ephemerides day with an accuracy of 0.5 arc seconds. "
   [jde]
-  (let [t (julian-centuries jde)
+  (let [t (time/julian-centuries jde)
         omega (longitude-ascending-node-moon t)
         l-sun (mean-longitude-sun t)
         l-moon (mean-longitude-moon t)]
@@ -74,7 +74,7 @@
   "Calculates the nutation in obliquity (delta epsilon) in arc seconds for the
   julian ephemerides day with an accuracy of 0.1 arc seconds."
   [jde]
-  (let [t (julian-centuries jde)
+  (let [t (time/julian-centuries jde)
         omega (longitude-ascending-node-moon t)
         l-sun (mean-longitude-sun t)
         l-moon (mean-longitude-moon t)]
@@ -88,9 +88,9 @@
   1 arc second over a period of 2000 years and 10 arc seconds over a
   period of 4000 years."
   [jde]
-  (let [t (julian-centuries jde)]
+  (let [t (time/julian-centuries jde)]
         ; TODO convert to deg and use the deg values here
-       (+ (dms-to-deg "23°26'21.448\"") (* -1 (dms-to-deg "0°0'46.8150\"") t)
-          (* -1 (dms-to-deg "0°0'0.00059\"") t t) (* (dms-to-deg "0°0'0.001813\"") t t t))))
+       (+ (angle/dms-to-deg "23°26'21.448\"") (* -1 (angle/dms-to-deg "0°0'46.8150\"") t)
+          (* -1 (angle/dms-to-deg "0°0'0.00059\"") t t) (* (angle/dms-to-deg "0°0'0.001813\"") t t t))))
 
 ; TODO high accuracy variant

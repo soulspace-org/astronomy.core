@@ -16,10 +16,10 @@
 ;;
 
 ; defining constants
-(def c "Light speed [m/s]" 299792458)
+(def ^:const c "Light speed [m/s]" 299792458)
 
 ; primary constants
-(def G "Constant of gravitation [m^3/kg s^2]" 6.67428e-11)
+(def ^:const G "Constant of gravitation [m^3/kg s^2]" 6.67428e-11)
 
 (def rho "General Precession in longitude per Julian Century, at standard epoch 2000" "5028.796195\"")
 (def epsilon "Obliquity of the ecliptic, at standard epoch 2000" "23°26'21.406\"")

@@ -10,8 +10,7 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 (ns org.soulspace.clj.astronomy.precession
-  (:require [org.soulspace.math.core :as m])
-  (:use [org.soulspace.clj.astronomy.time time instant]))
+  (:require [org.soulspace.math.core :as m]))
 
 ;;;
 ;;; Functions for calculating the precession

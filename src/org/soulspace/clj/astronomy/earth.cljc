@@ -10,8 +10,7 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 (ns org.soulspace.clj.astronomy.earth
-  (:require [org.soulspace.math.core :as m])
-  (:use [org.soulspace.clj.astronomy.time time instant]))
+  (:require [org.soulspace.math.core :as m]))
 
 ;; References:
 ;; Jean Meeus; Astronomical Algorithms, 2. Ed.; Willmann-Bell

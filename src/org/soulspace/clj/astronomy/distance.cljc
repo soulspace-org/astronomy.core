@@ -15,11 +15,11 @@
 ;;; Functions for astronomical distances
 ;;;
 
-(def AU_M "Astronomical Unit [m]" 149597870700)
-(def LY_M "Light year [m]" 9460730472580800)
-(def LY_AU "Light year [au]" 63241.077)
-(def PC_M "Parsec (Parallax second) [m]" 96939420213600000)
-(def PC_LY "Parsec (Parallax second) [ly]" 3.2616)
+(def ^:const AU_M "Astronomical Unit [m]" 149597870700)
+(def ^:const LY_M "Light year [m]" 9460730472580800)
+(def ^:const LY_AU "Light year [au]" 63241.077)
+(def ^:const PC_M "Parsec (Parallax second) [m]" 96939420213600000)
+(def ^:const PC_LY "Parsec (Parallax second) [ly]" 3.2616)
 
 (defn meters-to-astronomical-units
   "Converts the distance given in meters to astronomical units."
