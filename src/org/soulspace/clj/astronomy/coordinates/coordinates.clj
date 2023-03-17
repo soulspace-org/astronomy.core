@@ -10,16 +10,16 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 (ns org.soulspace.clj.astronomy.coordinates.coordinates
-  (:require [org.soulspace.math.core :as m])
-  (:use [org.soulspace.clj.astronomy.time time instant]))
+  (:require [org.soulspace.math.core :as m]
+            [org.soulspace.clj.astronomy.time :as time]))
 
 (def pi-ninetieth "Defines Pi/90 for speed." (/ m/PI 90)) ; 2 degrees
 
 (defn angular-distance
   "Calculates the angular distance between the coordinates (given in rad)."
-  ([[ra1 dec1] [ra2 dec2]]
+  (^double [[^double ra1 ^double dec1] [^double ra2 ^double dec2]]
    (angular-distance ra1 dec1 ra2 dec2))
-  ([ra1 dec1 ra2 dec2]
+  (^double [^double ra1 ^double dec1 ^double ra2 ^double dec2]
    (let [delta-ra (- ra1 ra2)
          delta-dec (- dec1 dec2)]
      (if (or (< (abs (- (abs dec1) m/HALF-PI)) pi-ninetieth) (< (abs (- (abs dec1) m/HALF-PI)) pi-ninetieth))
@@ -28,18 +28,18 @@
 
 (defn zenit-distance-by-altitude
   "Calculates the zenit distance by altitude (given in rad)."
-  [altitude]
+  ^double [^double altitude]
   (- m/HALF-PI (min (abs altitude) m/HALF-PI)))
 
 (defn altitude-by-zenit-distance
   "Calculates the altitude by zenit distance (given in rad)."
-  [zenit-distance]
+  ^double [^double zenit-distance]
   (- m/HALF-PI (min (abs zenit-distance))))
 
 (defn hour-angle
   "Calculates the hour angle of the right ascension at the given instant."
-  ([instant ra]
-   (- (mean-siderial-time-greenwich instant) ra)))
+  (^double [instant ^double ra]
+   (- (time/mean-siderial-time-greenwich instant) ra)))
 
 ; TODO move protocol and records to a domain layer
 (defprotocol CelestialObject
@@ -47,6 +47,10 @@
   (horizontal-coordinates [obj time location])
   (equatorial-coordinates [obj time location])
   (magnitude [obj time location]))
+
+
+(defprotocol Coordinates
+  "Protocol for coordinate systems.")
 
 ;; TODO convert to records
 (defprotocol HorizontalCoordinates
