@@ -30,7 +30,7 @@
      :omega omega}))
   
 (deftest polar-radius-test
-  (is (= (polar-radius {:equatorial-radius earth} {:flattening earth}) 6356755)))
+  (is (= (polar-radius (:equatorial-radius earth) (:flattening earth)) 6356755)))
 
 (deftest eccentricity-test
   (is (= (eccentricity flattening) 0.08181922)))
@@ -38,8 +38,8 @@
 ; Location and height of the Palomar Observatory
 (deftest topocentric-parameters-by-height-test
   (let [lat (m/deg-to-rad (dms-to-deg "33° 21' 22\""))
-        equatorial-radius {:equatorial-radius earth}
-        polar-radius {:polar-radius earth}
+        equatorial-radius (:equatorial-radius earth)
+        polar-radius (:polar-radius earth)
         p (topocentric-parameters-by-height lat 1706 equatorial-radius polar-radius)]
     (is (= (m/rad-to-deg (:u p)) 33.267796 ))
     (is (= (:rho-sin-topocentric-lat p) 0.546861))
