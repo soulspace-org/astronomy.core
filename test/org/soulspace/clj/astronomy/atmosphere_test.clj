@@ -9,8 +9,9 @@
 ;;;;
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
-(ns org.soulspace.clj.astronomy.test.nutation
-  (:use [clojure.test]
-        [org.soulspace.clj.astronomy.test]
-        [org.soulspace.clj.astronomy nutation]))
+
+(ns org.soulspace.clj.astronomy.atmosphere-test
+  (:require [clojure.test :refer :all]
+            [org.soulspace.clj.astronomy.test-utils :as utils]
+            [org.soulspace.clj.astronomy.atmosphere :refer :all]))
 

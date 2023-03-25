@@ -11,9 +11,9 @@
 ;;;;
 (ns org.soulspace.clj.astronomy.constants)
 
-;;
-;; definition of astronomical constants
-;;
+;;;
+;;; definition of general astronomical constants
+;;;
 
 ; defining constants
 (def ^:const c "Light speed [m/s]" 299792458)
