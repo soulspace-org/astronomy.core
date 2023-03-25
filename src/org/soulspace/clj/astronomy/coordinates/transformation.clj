@@ -9,11 +9,14 @@
 ;;;;
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
+
 (ns org.soulspace.clj.astronomy.coordinates.transformation
   (:require [org.soulspace.math.core :as m]))
 
-; References:
-; Montenbruck, Oliver; Grundlagen der Ephemeridenrechnung; 7. Aufl.; Spektrum Akademischer Verlag
+;;;;
+;;;; References:
+;;;; Montenbruck, Oliver; Grundlagen der Ephemeridenrechnung; 7. Aufl.; Spektrum Akademischer Verlag
+;;;;
 
 (defn- calc-beta
   [z rho]
