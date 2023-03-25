@@ -11,8 +11,7 @@
 ;;;;
 (ns org.soulspace.clj.astronomy.time
   "Functions to handle time."
-  (:require [org.soulspace.math.core :as m])
- )
+  (:require [org.soulspace.math.core :as m]))
 
 ;;;;
 ;;;; References:

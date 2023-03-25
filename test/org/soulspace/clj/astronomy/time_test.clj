@@ -9,6 +9,7 @@
 ;;;;
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
+
 (ns org.soulspace.clj.astronomy.time-test
   (:require [clojure.test :refer :all]
             [org.soulspace.clj.astronomy.test-utils :as atest]
