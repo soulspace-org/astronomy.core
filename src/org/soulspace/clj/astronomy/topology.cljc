@@ -40,7 +40,7 @@
            (m/tan topographic-latitude))))
 
 (defn topocentric-parameters-by-height
-  ^double [^double topographic-latitude ^double height ^double equatorial-radius ^double polar-radius]
+  [^double topographic-latitude ^double height ^double equatorial-radius ^double polar-radius]
   (let [u (m/atan (* (/ polar-radius equatorial-radius) (m/tan topographic-latitude)))
         rho-sin-gc-lat (+ (* (/ polar-radius equatorial-radius) (m/sin u)) (* (/ height equatorial-radius) (m/sin topographic-latitude)))
         rho-cos-gc-lat (+ (m/cos u)(* (/ height equatorial-radius) (m/cos topographic-latitude)))
@@ -86,7 +86,9 @@
   "Calculates the topodesic distance (great circle distance) between 2 positions on the body."
   (^double [[long1 lat1] [long2 lat2] ^double equatorial-radius ^double flattening]
    (topodesic-distance long1 lat1 long2 lat2 equatorial-radius flattening))
-  (^double [long1 lat1 long2 lat2 ^double equatorial-radius ^double flattening]
+  ([long1 lat1 long2 lat2 equatorial-radius flattening]
+   ; (^double [long1 lat1 long2 lat2 ^double equatorial-radius ^double flattening]
+   ; fns taking primitives support only 4 or fewer args
    (let [F (/ (+ lat1 lat2) 2)
          G (/ (- lat1 lat2) 2)
          L (/ (+ long1 long2) 2.0)

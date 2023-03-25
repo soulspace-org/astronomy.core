@@ -10,16 +10,17 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 (ns org.soulspace.clj.astronomy.time
+  "Functions to handle time."
   (:require [org.soulspace.math.core :as m])
-  (:import [java.util Date GregorianCalendar SimpleTimeZone TimeZone]))
+ )
 
-; TODO Clojurescript compatibility
+;;;;
+;;;; References:
+;;;; Meeus, Jean; Astronomical Algorithms, 2nd Ed.; Willmann Bell
+;;;;
 
-; References:
-; Meeus, Jean; Astronomical Algorithms, 2nd Ed.; Willmann Bell
-
-(def julian-century 36525)
-(def J2000 2451545)
+(def ^:const julian-century 36525)
+(def ^:const J2000 2451545)
 (def days [:sunday :monday :tuesday :wednesday :thursday :friday :saturday])
 
 (def timezones ["Etc/GMT-14" "Etc/GMT-13" "Etc/GMT-12" "Etc/GMT-11" "Etc/GMT-10" "Etc/GMT-9"
@@ -28,9 +29,14 @@
                 "Etc/GMT+4" "Etc/GMT+5" "Etc/GMT+6" "Etc/GMT+7" "Etc/GMT+8" "Etc/GMT+9"
                 "Etc/GMT+10" "Etc/GMT+11" "Etc/GMT+12"])
 
-;
-; Calendar and time calculations
-;
+;;;
+;;; Calendar and time calculations
+;;;
+
+;;
+;; Julian days
+;;
+
 (defn julian-day
   "Calculates the julian day from a calender date."
   [y m d b]
@@ -102,12 +108,6 @@
     (julian-date-to-julian-day year month day)
     (gregorian-date-to-julian-day year month day)))
 
-(defn java-date-to-julian-day
-  "Calculates the julian day for the java.util.Date instant."
-  [date]
-  (let [time-millis (.getTime date)]
-    (+ (/ time-millis 1000 60 60 24) (date-to-julian-day 1970 1 1) (- 0.5))))
-
 (defn time-of-day
   "Calculates the time in hours, minutes and seconds for the given decimal day."
   [day]
@@ -169,9 +169,9 @@
         f (- x (m/floor x))]
     (time-of-day f)))
 
-;
-; Easter date
-;
+;;
+;; Easter date
+;;
 (defn easter-date-by-gregorian-date
   "Calculates the easter date for the given year in the gregorian calender."
   [year]
@@ -218,9 +218,9 @@
   (let [{year :year} (julian-day-to-date jd)]
     (easter-date year)))
 
-;
-; Dynamic time
-;
+;;
+;; Dynamic time
+;;
 (defn delta-t-meeus
   "Calculates Delta T after the formulars given in Astronomical Algorithms."
   [year]
@@ -303,9 +303,9 @@
   ([jd epoch]
    (/ (- jd epoch) julian-century)))
 
-;
-; Epoch calculations
-;
+;;
+;; Epoch calculations
+;;
 (defn julian-day-of-julian-year
   "Calculates the julian day of the beginning of the given bessel year."
   [julian-year]
@@ -316,9 +316,9 @@
   [bessel-year]
   (+ 2415020.31352M (* 365.242198781M (- bessel-year 1900))))
 
-;
-; Sideral time
-;
+;;
+;; Sideral time
+;;
 (defn mean-siderial-time-greenwich-0ut
   "Calculates the mean sidereal time in degrees at greenwich at 0h UT."
   [jd]
@@ -339,21 +339,42 @@
            (* -1 (/ (m/pow T 3) 38710000M)))
          360)))
 
+;;
+;; Unix milliseconds interop
+;;
+(defn now-ms
+  "Returns the current time in milliseconds since 1970-01-01 00:00:00.000."
+  []
+  #?(:clj (System/currentTimeMillis)
+     :cljs (.getTime (js/Date.))))
 
-(defprotocol Instant
-  (as-julian-day [date] "Returns the julian day of this point in time.")
-  (as-date [date]))
+(defn date-to-milliseconds
+  "Returns the milliseconds since 1970-01-01 00:00:00.000 for a platform date"
+  [date]
+  (.getTime date))
 
-(defrecord JulianDay [jd timezone]
-  Instant
-  (as-julian-day [this] jd)
-  (as-date [this] (julian-day-to-date jd)))
+(defn milliseconds-to-julian-day
+  "Calculates the julian day for the milliseconds since 1970-01-01 00:00:00.000."
+  [ms]
+  (+ (/ ms 1000 60 60 24) (date-to-julian-day 1970 1 1) (- 0.5)))
 
-(defn new-julian-day
-  "Creates a new julian day instant."
-  ([]
-   (new-julian-day (Date.) (TimeZone/getDefault)))
-  ([date]
-   (new-julian-day date (TimeZone/getDefault)))
-  ([date timezone]
-   (JulianDay. (java-date-to-julian-day date) timezone)))
+
+(comment
+  (defprotocol Instant
+    (as-julian-day [date] "Returns the julian day of this point in time.")
+    (as-date [date]))
+
+  (defrecord JulianDay [jd timezone]
+    Instant
+    (as-julian-day [this] jd)
+    (as-date [this] (julian-day-to-date jd)))
+
+  (defn new-julian-day
+    "Creates a new julian day instant."
+    ([]
+     (new-julian-day (now-ms)))
+    ([date]
+     (new-julian-day date (java.util.TimeZone/getDefault)))
+    ([date timezone]
+     (JulianDay. (milliseconds-to-julian-day (date-to-milliseconds date)) timezone)))
+  )

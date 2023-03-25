@@ -10,6 +10,7 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 (ns org.soulspace.clj.astronomy.angle
+  "Functions to handle angles."
   (:require [clojure.spec.alpha :as s]
             [org.soulspace.math.core :as m]))
 
@@ -81,7 +82,10 @@
      (map? dms)
      (dms-to-deg (:sign dms) (:deg dms) (:min dms) (:sec dms))
      (string? dms)
-     (let [[_ sgn deg min sec] (re-matches dms-pattern dms)]
+     (let [[_ sgn deg min sec] (re-matches dms-pattern dms)
+           sgn (if (nil? sgn) "+" sgn)
+           min (if (nil? min) "0" min)
+           sec (if (nil? sec) "0" sec)]
        (dms-to-deg (if (= sgn "-") -1 1) (parse-long deg) (parse-long min) (parse-double sec)))))
   ([sgn deg min]
    (dms-to-deg sgn deg min 0.0))

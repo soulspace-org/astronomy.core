@@ -10,16 +10,15 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 (ns org.soulspace.clj.astronomy.atmosphere
+  "Functions for calculations related to the atmosphere of the earth."
   (:require [org.soulspace.math.core :as m]))
 
-;;
-;; Functions for calculations regarding the athmospere of the earth.
-;;
-;; References:
-;; Erik Wischnewski; Astronomie in Theorie und Praxis; 6. Aufl.; Erik Wischnewski; Kapitel 2: Atmosphäre der Erde
-;; Wikipedia.de; Rayleigh-Streuung
-;; Wikipedia.de; Mie-Streuung
-;;
+;;;;
+;;;; References:
+;;;; Erik Wischnewski; Astronomie in Theorie und Praxis; 6. Aufl.; Erik Wischnewski; Kapitel 2: Atmosphäre der Erde
+;;;; Wikipedia.de; Rayleigh-Streuung
+;;;; Wikipedia.de; Mie-Streuung
+;;;;
 
 ;
 ; Extinction

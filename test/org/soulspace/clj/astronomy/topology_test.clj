@@ -9,11 +9,12 @@
 ;;;;
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
-(ns org.soulspace.clj.astronomy.test.topology
-  (:require [org.soulspace.math.core :as m])
-  (:use [clojure.test]
-        [org.soulspace.clj.astronomy.test]
-        [org.soulspace.clj.astronomy topology angle]))
+(ns org.soulspace.clj.astronomy.topology-test
+  (:require [clojure.test :refer :all]
+            [org.soulspace.math.core :as m]
+            [org.soulspace.clj.astronomy.test-utils :as utils]
+            [org.soulspace.clj.astronomy.angle :as a]
+            [org.soulspace.clj.astronomy.topology :refer :all]))
 
 (def flattening (/ 1 298.257)) ; flattening
 
@@ -30,17 +31,20 @@
      :omega omega}))
   
 (deftest polar-radius-test
-  (is (= (polar-radius (:equatorial-radius earth) (:flattening earth)) 6356755)))
+  (is (utils/within-error-margin 6356755.288
+                         (polar-radius (:equatorial-radius earth)
+                                       (:flattening earth))
+                         0.001)))
 
 (deftest eccentricity-test
-  (is (= (eccentricity flattening) 0.08181922)))
+  (is (utils/within-error-margin 0.08181922 (eccentricity flattening))))
 
 ; Location and height of the Palomar Observatory
 (deftest topocentric-parameters-by-height-test
-  (let [lat (m/deg-to-rad (dms-to-deg "33° 21' 22\""))
+  (let [lat (m/deg-to-rad (a/dms-to-deg "33° 21' 22\""))
         equatorial-radius (:equatorial-radius earth)
         polar-radius (:polar-radius earth)
-        p (topocentric-parameters-by-height lat 1706 equatorial-radius polar-radius)]
-    (is (= (m/rad-to-deg (:u p)) 33.267796 ))
-    (is (= (:rho-sin-topocentric-lat p) 0.546861))
-    (is (= (:rho-cos-topocentric-lat p) 0.836339))))
+        p (topocentric-parameters-by-height lat 1706.0 equatorial-radius polar-radius)]
+    (is (utils/within-error-margin 33.267796 (m/rad-to-deg (:u p))))
+    (is (utils/within-error-margin  0.546861 (:rho-sin-topocentric-lat p)))
+    (is (utils/within-error-margin  0.836339 (:rho-cos-topocentric-lat p) ))))
