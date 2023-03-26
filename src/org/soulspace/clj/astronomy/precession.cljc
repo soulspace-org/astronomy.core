@@ -38,5 +38,5 @@
   [t [ra dec]]
   (let [m (calc-m t)
         n (calc-n t)]
-   {:delta-ra (+ m (* n (m/sin ra) (m/cos dec)))
+   {:delta-ra (+ m (* n (m/sin ra) (m/tan dec)))
     :delta-dec (* 15 n (m/cos ra))}))

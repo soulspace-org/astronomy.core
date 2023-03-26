@@ -3,7 +3,10 @@ Changelog
 
 Version 0.4.2
 -------------
-* Added Instant protocol with implementation JulianDay
+* added Instant protocol with implementation JulianDay
+* renamed parameter for central lattitude to 'lat-0' in projections
+* fixed a bug in annual-precession-low-accuracy
+* added more nutation functions and tests
 
 Version 0.4.1
 -------------
@@ -15,4 +18,3 @@ Version 0.4.0
 * refactorings
 * bug fixes
 * comment cleanups
-

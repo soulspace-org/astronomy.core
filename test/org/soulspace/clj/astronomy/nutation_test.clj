@@ -12,6 +12,21 @@
 
 (ns org.soulspace.clj.astronomy.nutation-test
   (:require [clojure.test :refer :all]
-        [org.soulspace.clj.astronomy.test-utils :as utils]
-        [org.soulspace.clj.astronomy.nutation :refer :all]))
+            [org.soulspace.clj.astronomy.test-utils :as utils]
+            [org.soulspace.clj.astronomy.angle :as angle]
+            [org.soulspace.clj.astronomy.time :as time]
+            [org.soulspace.clj.astronomy.nutation :refer :all]))
+
+(deftest mean-anomaly-sun-test
+  (testing "Testing mean anomaly of the sun" 
+    (is (utils/within-error-margin
+         -4225.0208 (mean-anomaly-sun (time/julian-centuries 2446895.5)))) 0.0001))
+
+(deftest mean-obliquity-test
+  (testing "Testing mean obliquity with low accuracy"
+    (is (utils/within-error-margin
+         23.440946 (mean-obliquity 2446895.5))))
+  (testing "Testing mean obliquity with low accuracy"
+    (is (utils/within-error-margin
+         23.440946 (mean-obliquity-high-accuracy 2446895.5)))))
 
