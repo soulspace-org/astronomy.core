@@ -11,7 +11,7 @@
 ;;;;
 
 (ns org.soulspace.clj.astronomy.instruments.visual
-  (:reuire [org.soulspace.math.core :as m]))
+  (:require [org.soulspace.math.core :as m]))
 
 ;;;
 ;;; optics

@@ -1,9 +1,14 @@
 Changelog
+=========
+
+Version 0.4.1
+-------------
+* fixed typo
 
 Version 0.4.0
 -------------
-* Dependency updates
-* Refactorings
-* Bug fixes
-* Comment cleanups
+* dependency updates
+* refactorings
+* bug fixes
+* comment cleanups
 
