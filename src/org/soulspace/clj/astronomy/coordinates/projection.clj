@@ -13,16 +13,18 @@
 (ns org.soulspace.clj.astronomy.coordinates.projection
   (:require [org.soulspace.math.core :as m]))
 
-; References:
-; Snyder, John P.; Map Projections - A Working Manual; USGS Professional Paper 1395
+;;;; References:
+;;;; Snyder, John P.; Map Projections - A Working Manual; USGS Professional Paper 1395
 
-; symbol mapping
-; lambda -> longitude
-; phi    -> latitude
-; R      -> radius of the sphere (either actual or corresponding to the scale of the map)
-; k0     -> relative scale factor along a parallel of latitude
+;;;; symbol mapping
+;;;; lambda -> longitude
+;;;; phi    -> latitude
+;;;; R      -> radius of the sphere (either actual or corresponding to the scale of the map)
+;;;; k0     -> relative scale factor along a parallel of latitude
 
-; implementations of spherical projections, no ellipsoid projections implemented yet
+;;;
+;;; implementations of spherical projections, no ellipsoid projections implemented yet
+;;;
 
 ; TODO move to a separate module
 ; TODO maybe add simplifications for long-0 or lat-0 = 0 or 90 degrees
