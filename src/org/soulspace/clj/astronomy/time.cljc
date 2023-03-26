@@ -371,7 +371,7 @@
 (defn new-julian-day
   "Creates a new julian day instant."
   ([]
-   (new-julian-day (now-ms)))
+   (JulianDay. (milliseconds-to-julian-day (now-ms))))
   ([date]
    (JulianDay. (milliseconds-to-julian-day (date-to-milliseconds date)))))
 
