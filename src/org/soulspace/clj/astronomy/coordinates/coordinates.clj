@@ -9,11 +9,12 @@
 ;;;;
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
+
 (ns org.soulspace.clj.astronomy.coordinates.coordinates
   (:require [org.soulspace.math.core :as m]
             [org.soulspace.clj.astronomy.time :as time]))
 
-(def pi-ninetieth "Defines Pi/90 for speed." (/ m/PI 90)) ; 2 degrees
+(def ^:const pi-ninetieth "Defines Pi/90 for speed." (/ m/PI 90)) ; 2 degrees
 
 (defn angular-distance
   "Calculates the angular distance between the coordinates (given in rad)."
@@ -22,7 +23,7 @@
   (^double [^double ra1 ^double dec1 ^double ra2 ^double dec2]
    (let [delta-ra (- ra1 ra2)
          delta-dec (- dec1 dec2)]
-     (if (or (< (abs (- (abs dec1) m/HALF-PI)) pi-ninetieth) (< (abs (- (abs dec1) m/HALF-PI)) pi-ninetieth))
+     (if (or (< (abs (- (abs dec1) m/HALF-PI)) pi-ninetieth) (< (abs (- (abs dec2) m/HALF-PI)) pi-ninetieth))
        (m/ahav (+ (m/hav delta-dec) (* (m/cos dec1) (m/cos dec2) (m/hav delta-ra)))) ; use haversine if declinations are near the poles
        (m/acos (+ (* (m/sin dec1) (m/sin dec2)) (* (m/cos dec1) (m/cos dec2) (m/cos delta-ra))))))))
 

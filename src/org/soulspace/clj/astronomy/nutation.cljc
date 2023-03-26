@@ -9,6 +9,7 @@
 ;;;;
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
+
 (ns org.soulspace.clj.astronomy.nutation
   (:require [org.soulspace.math.core :as m]
             [org.soulspace.clj.astronomy.time :as time]
