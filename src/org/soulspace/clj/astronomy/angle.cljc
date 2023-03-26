@@ -9,6 +9,7 @@
 ;;;;
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
+
 (ns org.soulspace.clj.astronomy.angle
   "Functions to handle angles."
   (:require [clojure.spec.alpha :as s]

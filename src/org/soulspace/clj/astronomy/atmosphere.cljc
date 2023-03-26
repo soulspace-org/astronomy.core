@@ -9,6 +9,7 @@
 ;;;;
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
+
 (ns org.soulspace.clj.astronomy.atmosphere
   "Functions for calculations related to the atmosphere of the earth."
   (:require [org.soulspace.math.core :as m]))
