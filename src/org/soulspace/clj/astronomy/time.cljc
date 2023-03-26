@@ -277,7 +277,7 @@
       (< year 2151) (let [u (/ (- y 1820M) 100M)]
                       (+ -20M (* 32M u u) (* -0.5628M (- 2150 y))))
       :else (let [u (/ (- y 1820M) 100M)]
-                    (+ -20M (* 32M u u))))))
+              (+ -20M (* 32M u u))))))
 
 (def delta-t delta-t-nasa)
 
@@ -324,9 +324,9 @@
   [jd]
   (let [T (julian-centuries jd)]
     (mod (+ 100.46061837M
-           (* 36000.770053608M T)
-           (* 0.000387933M T T)
-           (* -1 (/ (m/pow T 3) 38710000M)))
+            (* 36000.770053608M T)
+            (* 0.000387933M T T)
+            (* -1 (/ (m/pow T 3) 38710000M)))
          360)))
 
 (defn mean-siderial-time-greenwich
@@ -334,9 +334,9 @@
   [jd]
   (let [T (julian-centuries jd)]
     (mod (+ 280.46061837M
-           (* 360.98564736629M (- jd 2451545.0M))
-           (* 0.000387933M T T)
-           (* -1 (/ (m/pow T 3) 38710000M)))
+            (* 360.98564736629M (- jd 2451545.0M))
+            (* 0.000387933M T T)
+            (* -1 (/ (m/pow T 3) 38710000M)))
          360)))
 
 ;;
@@ -359,6 +359,22 @@
   (+ (/ ms 1000 60 60 24) (date-to-julian-day 1970 1 1) (- 0.5)))
 
 
+(defprotocol Instant
+  (as-julian-day [date] "Returns the julian day of this point in time.")
+  (as-date [date]))
+
+(defrecord JulianDay [jd]
+  Instant
+  (as-julian-day [this] jd)
+  (as-date [this] (julian-day-to-date jd)))
+
+(defn new-julian-day
+  "Creates a new julian day instant."
+  ([]
+   (new-julian-day (now-ms)))
+  ([date]
+   (JulianDay. (milliseconds-to-julian-day (date-to-milliseconds date)))))
+
 (comment
   (defprotocol Instant
     (as-julian-day [date] "Returns the julian day of this point in time.")
@@ -376,5 +392,4 @@
     ([date]
      (new-julian-day date (java.util.TimeZone/getDefault)))
     ([date timezone]
-     (JulianDay. (milliseconds-to-julian-day (date-to-milliseconds date)) timezone)))
-  )
+     (JulianDay. (milliseconds-to-julian-day (date-to-milliseconds date)) timezone))))
