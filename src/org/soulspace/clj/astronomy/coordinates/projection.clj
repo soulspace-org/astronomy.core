@@ -30,42 +30,44 @@
 ; TODO maybe add simplifications for long-0 or lat-0 = 0 or 90 degrees
 
 (defn stereographic-projection
-  "Calculates the stereographic projection of the coordinates of long and lat for a map centered on the coordinates long-0 and lat-0."
-    ([R k-0 [long-0 lat-1] [long lat]]
-     (stereographic-projection R k-0 long-0 lat-1 long lat))
-    ([R k-0 long-0 lat-1 long lat]
+  "Calculates the stereographic projection of the coordinates of long and lat
+   for a map centered on the coordinates long-0 and lat-0."
+    ([R k-0 [long-0 lat-0] [long lat]]
+     (stereographic-projection R k-0 long-0 lat-0 long lat))
+    ([R k-0 long-0 lat-0 long lat]
      (let [k (/ (* 2 k-0)
                 (+ 1
-                   (* (m/sin lat-1) (m/sin lat))
-                   (* (m/cos lat-1) (m/cos lat) (m/cos (- long long-0)))))
+                   (* (m/sin lat-0) (m/sin lat))
+                   (* (m/cos lat-0) (m/cos lat) (m/cos (- long long-0)))))
            x (* R k (m/cos lat) (m/sin (- long long-0)))
-           y (* R k (- (* (m/cos lat-1) (m/sin lat))
-                       (* (m/sin lat-1) (m/cos lat) (m/cos (- long long-0)))))]
+           y (* R k (- (* (m/cos lat-0) (m/sin lat))
+                       (* (m/sin lat-0) (m/cos lat) (m/cos (- long long-0)))))]
            ;h-stroke (+ (* (sin lat-1) (sin lat)) (* (cos lat-1) (cos lat) (cos (- long long-0)))) ; scale
            ;k-stroke 1.0 ; scale
        ;[x y h-stroke k-stroke]
        [x y])))
 
 (defn reverse-stereographic-projection
-  "Calculates the coordinates of x and y in a reversed stereographic projection for a map centered on the coordinates long-0 and lat-0."
-  ([R k-0 [long-0 lat-1] [x y]]
-   (reverse-stereographic-projection R k-0 long-0 lat-1 x y))
-  ([R k-0 long-0 lat-1 x y]
+  "Calculates the coordinates of x and y in a reversed stereographic projection
+   for a map centered on the coordinates long-0 and lat-0."
+  ([R k-0 [long-0 lat-0] [x y]]
+   (reverse-stereographic-projection R k-0 long-0 lat-0 x y))
+  ([R k-0 long-0 lat-0 x y]
    (let [rho (m/sqrt (+ (* x x) (* y y)))
          c (* 2 (m/atan2 rho (* 2 R k-0)))
          ; c (* 2 (atan (/ rho (* 2 R k-0))))
          lat (if (= rho 0.0)
-                lat-1
-                (m/asin (+ (* (m/cos c) (m/sin lat-1))
-                         (/ (* y (m/sin c) (m/cos lat-1))
+                lat-0
+                (m/asin (+ (* (m/cos c) (m/sin lat-0))
+                         (/ (* y (m/sin c) (m/cos lat-0))
                             rho))))
          long (cond
                 (= rho 0.0) long-0
-                (= lat-1 (/ m/PI 2)) (+ long-0 (m/atan2 x (* -1 y)))
-                (= lat-1 (/ m/PI -2)) (+ long-0 (m/atan2 x y))
+                (= lat-0 (/ m/PI 2)) (+ long-0 (m/atan2 x (* -1 y)))
+                (= lat-0 (/ m/PI -2)) (+ long-0 (m/atan2 x y))
                 :default (+ long-0 (m/atan (* x (m/sin (/ c
-                                                      (- (* rho (m/cos lat-1) (m/cos c))
-                                                         (* y (m/sin lat-1) (m/sin c)))))))))]
+                                                      (- (* rho (m/cos lat-0) (m/cos c))
+                                                         (* y (m/sin lat-0) (m/sin c)))))))))]
      [long lat])))
 
 (defn stereographic-projector
@@ -74,10 +76,10 @@
    (partial stereographic-projection R))
   ([R k-0]
    (partial stereographic-projection R k-0))
-  ([R k-0 [long-0 lat-1]]
-   (partial stereographic-projection R k-0 [long-0 lat-1]))
-  ([R k-0 long-0 lat-1]
-   (partial stereographic-projection R k-0 long-0 lat-1)))
+  ([R k-0 [long-0 lat-0]]
+   (partial stereographic-projection R k-0 [long-0 lat-0]))
+  ([R k-0 long-0 lat-0]
+   (partial stereographic-projection R k-0 long-0 lat-0)))
 
 (defn reverse-stereographic-projector
   "Returns a function for reverse stereographic projections."
@@ -85,19 +87,20 @@
    (partial reverse-stereographic-projection R))
   ([R k-0]
    (partial reverse-stereographic-projection R k-0))
-  ([R k-0 [long-0 lat-1]]
-   (partial reverse-stereographic-projection R k-0 [long-0 lat-1]))
-  ([R k-0 long-0 lat-1]
-   (partial reverse-stereographic-projection R k-0 long-0 lat-1)))
+  ([R k-0 [long-0 lat-0]]
+   (partial reverse-stereographic-projection R k-0 [long-0 lat-0]))
+  ([R k-0 long-0 lat-0]
+   (partial reverse-stereographic-projection R k-0 long-0 lat-0)))
 
 (defn orthographic-projection
-  "Calculates the orthographic projection of the coordinates of the coordinates of long and lat for a map centered on the coordinates long-0 and lat-0."
-  ([R [long-0 lat-1] [long lat]]
-   (orthographic-projection R long-0 lat-1 long lat))
-  ([R long-0 lat-1 long lat]
+  "Calculates the orthographic projection of the coordinates of the coordinates of long and lat
+   for a map centered on the coordinates long-0 and lat-0."
+  ([R [long-0 lat-0] [long lat]]
+   (orthographic-projection R long-0 lat-0 long lat))
+  ([R long-0 lat-0 long lat]
    (let [x (* R (m/cos lat) (m/sin (- long long-0)))
-         y (* R (- (* (m/cos lat-1) (m/sin lat))
-                   (* (m/sin lat-1) (m/cos lat) (m/cos (- long long-0)))))]
+         y (* R (- (* (m/cos lat-0) (m/sin lat))
+                   (* (m/sin lat-0) (m/cos lat) (m/cos (- long long-0)))))]
          ;h-stroke (+ (* (sin lat-1) (sin lat)) (* (cos lat-1) (cos lat) (cos (- long long-0))))
          ;k-stroke 1.0
 
@@ -105,43 +108,44 @@
      [x y])))
 
 (defn reverse-orthographic-projection
-  "Calculates the coordinates of x and y in a reversed orthographic projection for a map centered on the coordinates long-0 and lat-0."
-  ([R [long-0 lat-1] [x y]]
-   (reverse-orthographic-projection R long-0 lat-1 x y))
-  ([R long-0 lat-1 x y]
+  "Calculates the coordinates of x and y in a reversed orthographic projection
+   for a map centered on the coordinates long-0 and lat-0."
+  ([R [long-0 lat-0] [x y]]
+   (reverse-orthographic-projection R long-0 lat-0 x y))
+  ([R long-0 lat-0 x y]
    (let [rho (m/sqrt (+ (* x x) (* y y)))
          c (m/asin (/ rho R))
          lat (if (= rho 0.0)
-                lat-1
-                (m/asin (+ (* (m/cos c) (m/sin lat-1))
-                         (/ (* y (m/sin c) (m/cos lat-1))
+                lat-0
+                (m/asin (+ (* (m/cos c) (m/sin lat-0))
+                         (/ (* y (m/sin c) (m/cos lat-0))
                             rho))))
          long (cond
                 (= rho 0.0) long-0
-                (= lat-1 (/ m/PI 2)) (+ long-0 (m/atan2 x (* -1 y)))
-                (= lat-1 (/ m/PI -2)) (+ long-0 (m/atan2 x y))
+                (= lat-0 m/HALF-PI) (+ long-0 (m/atan2 x (* -1 y)))
+                (= lat-0 (/ m/PI -2)) (+ long-0 (m/atan2 x y))
                 :default (+ long-0 (m/atan (* x (m/sin (/ c
-                                                      (- (* rho (m/cos lat-1) (m/cos c))
-                                                         (* y (m/sin lat-1) (m/sin c)))))))))]
+                                                      (- (* rho (m/cos lat-0) (m/cos c))
+                                                         (* y (m/sin lat-0) (m/sin c)))))))))]
      [long lat])))
 
 (defn orthographic-projector
   "Returns a function for orthographic projections."
   ([R]
    (partial orthographic-projection R))
-  ([R [long-0 lat-1]]
-   (partial orthographic-projection R [long-0 lat-1]))
-  ([R long-0 lat-1]
-   (partial orthographic-projection R long-0 lat-1)))
+  ([R [long-0 lat-0]]
+   (partial orthographic-projection R [long-0 lat-0]))
+  ([R long-0 lat-0]
+   (partial orthographic-projection R long-0 lat-0)))
 
 (defn reverse-orthographic-projector
   "Returns a function for reverse orthographic projections."
   ([R]
    (partial reverse-orthographic-projection R))
-  ([R [long-0 lat-1]]
-   (partial reverse-orthographic-projection R [long-0 lat-1]))
-  ([R long-0 lat-1]
-   (partial reverse-orthographic-projection R long-0 lat-1)))
+  ([R [long-0 lat-0]]
+   (partial reverse-orthographic-projection R [long-0 lat-0]))
+  ([R long-0 lat-0]
+   (partial reverse-orthographic-projection R long-0 lat-0)))
 
 
 ;TODO implement other projections
