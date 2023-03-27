@@ -42,26 +42,3 @@
   (^double [instant ^double ra]
    (- (time/mean-siderial-time-greenwich instant) ra)))
 
-; TODO move protocol and records to a domain layer
-(defprotocol CelestialObject
-  "Protocol for celestial coordinates."
-  (horizontal-coordinates [obj time location])
-  (equatorial-coordinates [obj time location])
-  (magnitude [obj time location]))
-
-
-(defprotocol Coordinates
-  "Protocol for coordinate systems.")
-
-;; TODO convert to records
-(defprotocol HorizontalCoordinates
-  "Protocol for horizontal coordinate system (Alt/Az).")
-
-(defprotocol EquatorialCoordinates
-  "Protocol for equatorial coordinate system (RA/Dec).")
-
-(defprotocol EclipticalCoordinates
-  "Protocol for ecliptical coordinate system.")
-
-(defprotocol GalacticalCoordinates
-  "Protocol for galactical coordinate system.")
