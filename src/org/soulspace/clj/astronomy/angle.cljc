@@ -129,7 +129,7 @@
   (to-hms    [angle] "Returns the angle as hour angle, a map of h, min and sec.")
   (to-string [angle] "Returns a matching human readable string representation of the angle."))
 
-; TODO add specs, add modulo 360, 2*pi, 24 on respective constructors
+;; TODO add specs, add modulo 360, 2*pi, 24 on respective constructors
 
 ; Implementation of the Angle protocol that stores the angle as a degree value.
 (defrecord DegreeAngle

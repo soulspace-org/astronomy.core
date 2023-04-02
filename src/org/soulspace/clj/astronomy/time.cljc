@@ -375,7 +375,6 @@
   ([date]
    (JulianDay. (milliseconds-to-julian-day (date-to-milliseconds date)))))
 
-(comment
   (defprotocol Instant
     (as-julian-day [date] "Returns the julian day of this point in time.")
     (as-date [date]))
@@ -385,6 +384,36 @@
     (as-julian-day [this] jd)
     (as-date [this] (julian-day-to-date jd)))
 
+(defprotocol Epoch
+  "Protocol for Epochs."
+  (to-julian-epoch [this] [this year] [this year type])
+  (to-bessel-epoch [this] [this year] [this year type]))
+
+(defrecord BesselEpoch [year]
+  Epoch
+  (to-julian-epoch
+   ([this] this)
+   ([this year])
+   ([this year type]))
+  (to-bessel-epoch
+   ([this])
+   ([this year])
+   ([this year type]))
+  )
+  
+(defrecord JulianEpoch [year]
+  Epoch
+  (to-julian-epoch
+   ([this])
+   ([this year])
+   ([this year type]))
+  (to-bessel-epoch
+   ([this] this)
+   ([this year])
+   ([this year type]))
+  )
+  
+(comment
   (defn new-julian-day
     "Creates a new julian day instant."
     ([]

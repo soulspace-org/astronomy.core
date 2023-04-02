@@ -13,7 +13,7 @@
 (ns org.soulspace.clj.astronomy.coordinates-test
   (:require [clojure.test :refer :all]
             [org.soulspace.math.core :as m]
-            [org.soulspace.clj.astronomy.coordinates.coordinates :refer :all]
+            [org.soulspace.clj.astronomy.coordinates :refer :all]
             [org.soulspace.clj.astronomy.angle :as a]
             [org.soulspace.clj.astronomy.test-utils :as utils]))
 
