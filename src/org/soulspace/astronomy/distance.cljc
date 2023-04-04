@@ -90,23 +90,17 @@
 (declare convert-distance)
 
 (defprotocol IDistance
-  (meters [this] "Returns the distance in meters.")
-  (kilometers [this] "Returns the distance in meters.")
-  (astronomical-units [this] "Returns the distance in astronomical units.")
-  (light-years [this] "Returns the distance in light years.")
-  (parsecs [this] "Returns the distance in parallax seconds."))
+  (as-unit [this unit] "Returns the distance in the given unit.")
+  (as-value [this unit] "Returns the value of the distance in the given unit."))
 
-(defrecord Distance [d unit]
+(defrecord Distance [value unit]
   IDistance
-  (meters [this] (convert-distance this ::m))
-  (kilometers [this] (convert-distance this ::km))
-  (astronomical-units [this] (convert-distance this ::au))
-  (light-years [this] (convert-distance this ::ly))
-  (parsecs [this] (convert-distance this ::pc)))
+  (as-unit [this unit] (convert-distance this unit))
+  (as-value [this unit] (:value (convert-distance this unit))))
 
 (defmulti convert-distance
-  "Converts the given distance to the unit 'u'."
-  (fn [dist u] [(:unit dist) u]))
+  "Converts the given distance to the unit."
+  (fn [dist unit] [(:unit dist) unit]))
 
 (defmethod convert-distance [::m ::m] [dist _]
   dist)
@@ -183,3 +177,6 @@
 (defmethod convert-distance [::pc ::ly] [dist _]
   (->Distance (* (:value dist) PC_LY) ::ly))
 
+(def ONE_AU (->Distance 1 ::au))
+(def ONE_LY (->Distance 1 ::ly))
+(def ONE_PC (->Distance 1 ::pc))

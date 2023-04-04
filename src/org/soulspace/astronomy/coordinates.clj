@@ -11,8 +11,13 @@
 ;;;;
 
 (ns org.soulspace.astronomy.coordinates
+  "Coordinates functions and abstractions."
   (:require [org.soulspace.math.core :as m]
             [org.soulspace.astronomy.time :as time]))
+
+;;;
+;;; Coordinates functions and abstractions
+;;;
 
 (def ^:const pi-ninetieth "Defines Pi/90 for speed." (/ m/PI 90)) ; 2 degrees
 
@@ -240,7 +245,7 @@
 ;;; Protocols and types for coordinates
 ;;;
 
-(defprotocol Coordinate
+(defprotocol ICoordinate
   "Protocol for coordinate systems."
   (equatorial [this] [this jd location] "Returns the equtorial coordinates (RA/Dec).")
   (horizontal [this] [this jd location] "Returns the horizontal coordinates (Alt/Az).") 
@@ -249,7 +254,7 @@
   )
 
 (defrecord EquatorialCoordinate [ra dec]
-  Coordinate
+  ICoordinate
   (equatorial [this] [ra dec])
   (equatorial [this jd location])   ; TODO implement
   (horizontal [this])               ; TODO implement
@@ -258,7 +263,7 @@
   (ecliptical [this jd location]))  ; TODO implement
 
 (defrecord HorizontalCoordinate [alt az]
-  Coordinate
+  ICoordinate
   (equatorial [this])               ; TODO implement
   (equatorial [this jd location])   ; TODO implement
   (horizontal [this] [alt az])
@@ -267,7 +272,7 @@
   (ecliptical [this jd location]))  ; TODO implement
 
 (defrecord EclipticalCoordinate [lat long]
-  Coordinate
+  ICoordinate
   (equatorial [this])               ; TODO implement
   (equatorial [this jd location])   ; TODO implement
   (horizontal [this])               ; TODO implement

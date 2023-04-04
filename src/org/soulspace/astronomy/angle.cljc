@@ -11,19 +11,16 @@
 ;;;;
 
 (ns org.soulspace.astronomy.angle
-  "Functions to handle angles."
+  "Angle functions and abstractions."
   (:require [clojure.spec.alpha :as s]
             [org.soulspace.math.core :as m]))
 
-;; TODO move protocol and records to a domain layer
-
-; TODO define an angle protocol?
-; TODO angle operations: +, - (*, /)?
 
 ; pattern for parsing an angle string given in signed degrees, minutes and seconds, e.g. -80° 7' 30\"
 (def dms-pattern #"(\+|-)?(\d+)°\s*(?:(\d+)'\s*(?:(\d+(?:\.\d+)?)\")?)?")
 ; pattern for parsing a hour angle string given in hours, minutes and seconds, e.g. 10h 7m 30s
 (def hms-pattern #"(\d+)h\s*(?:(\d+)m\s*(?:(\d+(?:\.\d+)?)s)?)?")
+
 
 (comment
   (re-matches dms-pattern "+180° 15'")
@@ -118,54 +115,117 @@
     (dms-string (deg-to-dms a))))
 
 
-(defprotocol Angle
-  "Protocol for Angles."
-  (to-rad    [angle] "Returns the angle as radian value.")
-  (to-deg    [angle] "Returns the angle as degree value.")
-  (to-ha     [angle] "Returns the angle as hour value.")
-  (to-arcmin [angle] "Returns the angle as arc minutes value.")
-  (to-arcsec [angle] "Returns the angle as arc seconds value.")
-  (to-dms    [angle] "Returns the angle as a map of sign, deg, min and sec.")
-  (to-hms    [angle] "Returns the angle as hour angle, a map of h, min and sec.")
-  (to-string [angle] "Returns a matching human readable string representation of the angle."))
-
 ;; TODO add specs, add modulo 360, 2*pi, 24 on respective constructors
+;; TODO add angle operations: +, - (*, /)?
 
-; Implementation of the Angle protocol that stores the angle as a degree value.
-(defrecord DegreeAngle
-  [degrees]
-  Angle
-  (to-rad    [angle] (m/deg-to-rad (:degrees angle)))
-  (to-deg    [angle] (:degrees angle))
-  (to-ha     [angle] (/ (:degrees angle) 15))
-  (to-arcmin [angle] (* 60 (:degrees angle)))
-  (to-arcsec [angle] (* 3600 (:degrees angle)))
-  (to-dms    [angle] (deg-to-dms (:degrees angle)))
-  (to-hms    [angle] (ha-to-hms (deg-to-ha (:degrees angle))))
-  (to-string [angle] (dms-string (:degrees angle))))
 
-; Implementation of the Angle protocol that stores the angle as a degree value.
-(defrecord HourAngle
-  [ha]
-  Angle
-  (to-rad    [angle] (m/deg-to-rad (ha-to-deg (:ha angle))))
-  (to-deg    [angle] (ha-to-deg (:ha angle)))
-  (to-ha     [angle] (:ha angle))
-  (to-arcmin [angle] (* 60 (ha-to-deg (:ha angle))))
-  (to-arcsec [angle] (* 3600 (ha-to-deg (:ha angle))))
-  (to-dms    [angle] (deg-to-dms (:ha angle)))
-  (to-hms    [angle] (ha-to-hms (:ha angle)))
-  (to-string [angle] (hms-string (:ha angle))))
+(def angle-units #{::rad ::deg ::arcmin ::arcsec ::hour-angle ::dms ::hms})
+(declare convert-angle)
 
-; Implementation of the Angle protocol that stores the angle as a radian value.
-(defrecord RadianAngle
-  [radians]
-  Angle
-  (to-rad    [angle] (:radians angle))
-  (to-deg    [angle] (m/rad-to-deg (:radians angle)))
-  (to-ha     [angle] (/ (m/rad-to-deg (:radians angle)) 15))
-  (to-arcmin [angle] (* 60 (m/rad-to-deg (:radians angle))))
-  (to-arcsec [angle] (* 3600 (m/rad-to-deg (:radians angle))))
-  (to-dms    [angle] (deg-to-dms (m/rad-to-deg (:radians angle))))
-  (to-hms    [angle] (ha-to-hms (deg-to-ha (m/rad-to-deg (:radians angle)))))
-  (to-string [angle] (dms-string (m/rad-to-deg (:radians angle)))))
+(defprotocol IAngle
+  "Protocol for Angles."
+  (as-unit       [this unit] "Returns the angle in the given unit.")
+  (as-value      [this unit] "Returns the value of the angle in the given unit.")
+  (normalize     [this]      "Returns the angle in the range of [0°-360°[ degrees. Keeps the unit.")
+  (as-dms-string [this]      "Returns a string representation as degrees, minutes and seconds.")
+  (as-hms-string [this]      "Returns a string representation as an hour angle with minutes and seconds."))
+
+(defrecord Angle [value unit]
+  IAngle
+  (as-unit       [this unit] (convert-angle this unit))
+  (as-value      [this unit] (:value (convert-angle this unit)))
+  (normalize     [this]      nil) ; implement modulo 360°
+  (as-dms-string [this]      (dms-string (convert-angle this ::dms)))
+  (as-hms-string [this]      (hms-string (convert-angle this ::hms)))
+  )
+
+(defn create-angle
+  "Creates an angle record."
+  [value unit]
+  (->Angle value unit))
+
+(defmulti convert-angle
+  "Converts an angle 'a' to the given unit 'u'."
+  (fn [a u] [(:unit a) u]))
+
+(defmethod convert-angle [::rad ::rad] [angle _]
+  angle)
+
+(defmethod convert-angle [::deg ::deg] [angle _]
+  angle)
+
+(defmethod convert-angle [::arcmin ::arcmin] [angle _]
+  angle)
+
+(defmethod convert-angle [::arcsec ::arcsec] [angle _]
+  angle)
+
+(defmethod convert-angle [::hour-angle ::hour-angle] [angle _]
+  angle)
+
+(defmethod convert-angle [::dms ::dms] [angle _]
+  angle)
+
+(defmethod convert-angle [::hms ::hms] [angle _]
+  angle)
+
+(defmethod convert-angle [::rad ::deg] [angle _]
+  (->Angle (m/rad-to-deg (:value angle)) ::deg))
+
+(defmethod convert-angle [::deg ::rad] [angle _]
+  (->Angle (m/deg-to-rad (:value angle)) ::rad))
+
+(defmethod convert-angle [::rad ::arcmin] [angle _]
+  (->Angle (* (m/rad-to-deg (:value angle)) 60) ::arcmin))
+
+(defmethod convert-angle [::arcmin ::rad] [angle _]
+  (->Angle (m/deg-to-rad (/ (:value angle) 60)) ::rad))
+
+(defmethod convert-angle [::rad ::arcsec] [angle _]
+  (->Angle (* (m/rad-to-deg (:value angle)) 3600) ::arcsec))
+
+(defmethod convert-angle [::arcsec ::rad] [angle _]
+  (->Angle (m/deg-to-rad (/ (:value angle) 3600)) ::rad))
+
+(defmethod convert-angle [::rad ::hour-angle] [angle _]
+  (->Angle (/ (m/rad-to-deg (:value angle)) 15) ::hour-angle))
+
+(defmethod convert-angle [::hour-angle ::rad] [angle _]
+  (->Angle (m/deg-to-rad (* (:value angle) 15)) ::rad))
+
+(defmethod convert-angle [::deg ::arcmin] [angle _]
+  (->Angle (* (:value angle) 60) ::arcmin))
+
+(defmethod convert-angle [::arcmin ::deg] [angle _]
+  (->Angle (/ (:value angle) 60) ::deg))
+
+(defmethod convert-angle [::deg ::arcsec] [angle _]
+  (->Angle (* (:value angle) 3600) ::arcsec))
+
+(defmethod convert-angle [::arcsec ::deg] [angle _]
+  (->Angle (/ (:value angle) 3600) ::deg))
+
+(defmethod convert-angle [::deg ::hour-angle] [angle _]
+  (->Angle (/ (:value angle) 15) ::hour-angle))
+
+(defmethod convert-angle [::hour-angle ::deg] [angle _]
+  (->Angle (* (:value angle) 15) ::deg))
+
+(defmethod convert-angle [::arcmin ::arcsec] [angle _]
+  (->Angle (* (:value angle) 60) ::arcsec))
+
+(defmethod convert-angle [::arcsec ::arcmin] [angle _]
+  (->Angle (/ (:value angle) 60) ::arcmin))
+
+(defmethod convert-angle [::arcmin ::hour-angle] [angle _]
+  (->Angle (/ (:value angle) 60 15) ::hour-angle))
+
+(defmethod convert-angle [::hour-angle ::arcmin] [angle _]
+  (->Angle (* (:value angle) 15 60) ::arcmin))
+
+(defmethod convert-angle [::arcsec ::hour-angle] [angle _]
+  (->Angle (/ (:value angle) 3600 15) ::hour-angle))
+
+(defmethod convert-angle [::hour-angle ::arcsec] [angle _]
+  (->Angle (* (:value angle) 15 3600) ::arcsec))
+

@@ -20,4 +20,4 @@
 (deftest conversion-test
   (testing "AstronomicalUnit conversions"
     (are [x y] (== x y)
-      149597870700 (d/meters (d/->Distance 1 :d/au)))))
+      149597870700 (d/as-value (d/->Distance 1 ::d/au) ::d/m))))
