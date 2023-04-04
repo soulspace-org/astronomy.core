@@ -10,11 +10,11 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.time-test
+(ns org.soulspace.astronomy.time-test
   (:require [clojure.test :refer :all]
-            [org.soulspace.clj.astronomy.test-utils :as atest]
-            [org.soulspace.clj.astronomy.angle :refer [deg-to-ha]]
-            [org.soulspace.clj.astronomy.time :refer :all]))
+            [org.soulspace.astronomy.test-utils :as atest]
+            [org.soulspace.astronomy.angle :refer [deg-to-ha]]
+            [org.soulspace.astronomy.time :refer :all]))
 
 (deftest julian-day-test
   (are [x y] (= x y)

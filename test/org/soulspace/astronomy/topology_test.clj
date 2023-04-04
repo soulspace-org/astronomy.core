@@ -10,12 +10,12 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.topology-test
+(ns org.soulspace.astronomy.topology-test
   (:require [clojure.test :refer :all]
             [org.soulspace.math.core :as m]
-            [org.soulspace.clj.astronomy.test-utils :as utils]
-            [org.soulspace.clj.astronomy.angle :as a]
-            [org.soulspace.clj.astronomy.topology :refer :all]))
+            [org.soulspace.astronomy.test-utils :as utils]
+            [org.soulspace.astronomy.angle :as a]
+            [org.soulspace.astronomy.topology :refer :all]))
 
 (def flattening (/ 1 298.257)) ; flattening
 

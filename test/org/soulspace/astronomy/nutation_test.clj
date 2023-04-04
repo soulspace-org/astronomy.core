@@ -10,12 +10,12 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.nutation-test
+(ns org.soulspace.astronomy.nutation-test
   (:require [clojure.test :refer :all]
-            [org.soulspace.clj.astronomy.test-utils :as utils]
-            [org.soulspace.clj.astronomy.angle :as angle]
-            [org.soulspace.clj.astronomy.time :as time]
-            [org.soulspace.clj.astronomy.nutation :refer :all]))
+            [org.soulspace.astronomy.test-utils :as utils]
+            [org.soulspace.astronomy.angle :as angle]
+            [org.soulspace.astronomy.time :as time]
+            [org.soulspace.astronomy.nutation :refer :all]))
 
 (deftest mean-anomaly-sun-test
   (testing "Testing mean anomaly of the sun" 

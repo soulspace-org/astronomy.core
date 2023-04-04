@@ -10,9 +10,9 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.types.solarsystem.planet
+(ns org.soulspace.astronomy.planet
   (:require [org.soulspace.math.core :as m]
-            [org.soulspace.clj.astronomy.angle :as angle]))
+            [org.soulspace.astronomy.angle :as angle]))
 
 ; TODO the protocol is about topological/topographical calculations not only relevant for planets, rename to topology!?
 ; TODO move protocol and record to domain layer, use functions from topology namespace

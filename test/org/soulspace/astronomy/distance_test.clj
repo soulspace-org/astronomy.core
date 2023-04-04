@@ -10,8 +10,14 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.atmosphere-test
+(ns org.soulspace.astronomy.distance-test
   (:require [clojure.test :refer :all]
-            [org.soulspace.clj.astronomy.test-utils :as utils]
-            [org.soulspace.clj.astronomy.atmosphere :refer :all]))
+        [org.soulspace.astronomy.test-utils :as utils]
+        [org.soulspace.astronomy.distance :as d])
+  ;(:import [org.soulspace.clj.astronomy.distance AstronomicalUnits])
+  )
 
+(deftest conversion-test
+  (testing "AstronomicalUnit conversions"
+    (are [x y] (== x y)
+      149597870700 (d/meters (d/->Distance 1 :d/au)))))

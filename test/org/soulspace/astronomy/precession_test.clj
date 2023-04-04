@@ -10,11 +10,11 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.precession-test
+(ns org.soulspace.astronomy.precession-test
   (:require [clojure.test :refer :all]
-            [org.soulspace.clj.astronomy.test-utils :as utils]
-            [org.soulspace.clj.astronomy.angle :as a]
-            [org.soulspace.clj.astronomy.precession :refer :all]))
+            [org.soulspace.astronomy.test-utils :as utils]
+            [org.soulspace.astronomy.angle :as a]
+            [org.soulspace.astronomy.precession :refer :all]))
 
 (deftest calc-m-test
   (is (utils/within-error-margin 3.075 (calc-m 0) 0.001)))

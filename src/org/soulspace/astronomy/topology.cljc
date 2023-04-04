@@ -10,7 +10,7 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.topology
+(ns org.soulspace.astronomy.topology
   (:require [org.soulspace.math.core :as m]))
 
 ;;;

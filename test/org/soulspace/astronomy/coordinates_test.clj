@@ -10,12 +10,12 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.coordinates-test
+(ns org.soulspace.astronomy.coordinates-test
   (:require [clojure.test :refer :all]
             [org.soulspace.math.core :as m]
-            [org.soulspace.clj.astronomy.coordinates :refer :all]
-            [org.soulspace.clj.astronomy.angle :as a]
-            [org.soulspace.clj.astronomy.test-utils :as utils]))
+            [org.soulspace.astronomy.coordinates :refer :all]
+            [org.soulspace.astronomy.angle :as a]
+            [org.soulspace.astronomy.test-utils :as utils]))
 
 ; Arcturus
 (def ra1 (m/deg-to-rad (a/ha-to-deg (a/hms-to-ha "14h15m39.7s"))))

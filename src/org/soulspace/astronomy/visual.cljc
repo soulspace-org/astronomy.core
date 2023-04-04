@@ -10,7 +10,7 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.instruments.visual
+(ns org.soulspace.astronomy.visual
   (:require [org.soulspace.math.core :as m]))
 
 ;;;

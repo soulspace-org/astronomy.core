@@ -10,9 +10,9 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.coordinates
+(ns org.soulspace.astronomy.coordinates
   (:require [org.soulspace.math.core :as m]
-            [org.soulspace.clj.astronomy.time :as time]))
+            [org.soulspace.astronomy.time :as time]))
 
 (def ^:const pi-ninetieth "Defines Pi/90 for speed." (/ m/PI 90)) ; 2 degrees
 
@@ -240,43 +240,37 @@
 ;;; Protocols and types for coordinates
 ;;;
 
-(defprotocol Coordinates
+(defprotocol Coordinate
   "Protocol for coordinate systems."
-  (equatorial [this] [this time location] "Returns the equtorial coordinates (RA/Dec).")
-  (horizontal [this] [this time location] "Returns the horizontal coordinates (Alt/Az).") 
-  (ecliptical [this] [this time location] "Returns the ecliptical coordinates (lat/long).")
+  (equatorial [this] [this jd location] "Returns the equtorial coordinates (RA/Dec).")
+  (horizontal [this] [this jd location] "Returns the horizontal coordinates (Alt/Az).") 
+  (ecliptical [this] [this jd location] "Returns the ecliptical coordinates (lat/long).")
   ; (galactical [obj] [obj time] "Returns the galactical coordinates.")
   )
 
-(defrecord EquatorialCoordinates [ra dec]
-  (equatorial
-    ([this] [ra dec])
-    ([this time location])) ; TODO implement
-  (horizontal
-    ([this])                ; TODO implement
-    ([this time location])) ; TODO implement
-  (ecliptical
-    ([this])                 ; TODO implement
-    ([this time location]))) ; TODO implement
+(defrecord EquatorialCoordinate [ra dec]
+  Coordinate
+  (equatorial [this] [ra dec])
+  (equatorial [this jd location])   ; TODO implement
+  (horizontal [this])               ; TODO implement
+  (horizontal [this jd location])   ; TODO implement
+  (ecliptical [this])               ; TODO implement
+  (ecliptical [this jd location]))  ; TODO implement
 
-(defrecord HorizontalCoordinates [alt az]
-  (equatorial
-    ([this])                ; TODO implement
-    ([this time location])) ; TODO implement
-  (horizontal
-    ([this] [alt az])       ; TODO implement
-    ([this time location])) ; TODO implement
-  (ecliptical
-    ([this])                ; TODO implement
-    ([this time location]))) ; TODO implement
+(defrecord HorizontalCoordinate [alt az]
+  Coordinate
+  (equatorial [this])               ; TODO implement
+  (equatorial [this jd location])   ; TODO implement
+  (horizontal [this] [alt az])
+  (horizontal [this jd location])   ; TODO implement
+  (ecliptical [this])               ; TODO implement
+  (ecliptical [this jd location]))  ; TODO implement
 
-(defrecord EclipticalCoordinates [lat long]
-  (equatorial
-    ([this])                ; TODO implement
-    ([this time location])) ; TODO implement
-  (horizontal
-    ([this])                ; TODO implement
-    ([this time location])) ; TODO implement
-  (ecliptical
-    ([this] [lat long])     ; TODO implement
-    ([this time location]))) ; TODO implement
+(defrecord EclipticalCoordinate [lat long]
+  Coordinate
+  (equatorial [this])               ; TODO implement
+  (equatorial [this jd location])   ; TODO implement
+  (horizontal [this])               ; TODO implement
+  (horizontal [this jd location])   ; TODO implement
+  (ecliptical [this] [lat long])
+  (ecliptical [this jd location]))  ; TODO implement

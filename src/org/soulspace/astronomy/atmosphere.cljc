@@ -10,7 +10,7 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.atmosphere
+(ns org.soulspace.astronomy.atmosphere
   "Functions for calculations related to the atmosphere of the earth."
   (:require [org.soulspace.math.core :as m]))
 
@@ -21,9 +21,9 @@
 ;;;; Wikipedia.de; Mie-Streuung
 ;;;;
 
-;
-; Extinction
-;
+;;;
+;;; Extinction
+;;;
 (defn airmass
  "Calculates the increase factor of the air mass of the atmosphere depending on the zenital distance of the source."
  [zenital-distance]
@@ -71,9 +71,9 @@
   ([zenital-distance wave-length]
    (* (airmass zenital-distance) (+ (rayleigh-extinction wave-length)))))
 
-;
-; Refraction
-;
+;;;
+;;; Refraction
+;;;
 (defn temperature-pressure-correction
  "Calculates the correction for temperature and air pressure"
  [temperature pressure]
@@ -99,6 +99,6 @@
   ([altitude temperature pressure]
    (* (refraction-by-true-altitude altitude) (temperature-pressure-correction temperature pressure))))
 
-;
-; Seeing
-;
+;;;
+;;; Seeing
+;;;

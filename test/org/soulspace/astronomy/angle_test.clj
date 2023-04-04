@@ -10,11 +10,11 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.angle-test
+(ns org.soulspace.astronomy.angle-test
   (:require [clojure.test :refer :all]
             [org.soulspace.math.core :as m]
-            [org.soulspace.clj.astronomy.test-utils :as utils]
-            [org.soulspace.clj.astronomy.angle :refer :all]))
+            [org.soulspace.astronomy.test-utils :as utils]
+            [org.soulspace.astronomy.angle :refer :all]))
 
 (deftest dms-to-deg-test
   (is (= 180.0     (dms-to-deg "+180°")))

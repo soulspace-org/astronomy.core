@@ -10,7 +10,7 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.test-utils)
+(ns org.soulspace.astronomy.test-utils)
 
 (defn within-error-margin
   "Tests if the actual and expected values are equal in the given error margin."

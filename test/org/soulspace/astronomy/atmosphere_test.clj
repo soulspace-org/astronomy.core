@@ -10,16 +10,8 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.magnitude-test
+(ns org.soulspace.astronomy.atmosphere-test
   (:require [clojure.test :refer :all]
-            [org.soulspace.clj.astronomy.test-utils :as utils]
-            [org.soulspace.clj.astronomy.magnitude :refer :all]))
-
-(deftest combined-magnitude-test
-  (is (utils/within-error-margin 1.96 (combined-magnitude 1.96) 0.01))
-  (is (utils/within-error-margin 1.58 (combined-magnitude 1.96 2.89) 0.01))
-  (is (utils/within-error-margin 3.93 (combined-magnitude 4.73 5.22 5.60) 0.01)))
-
-(deftest brightness-ratio-test
-  (is (utils/within-error-margin 6.19 (brightness-ratio 0.14 2.12) 0.01)))
+            [org.soulspace.astronomy.test-utils :as utils]
+            [org.soulspace.astronomy.atmosphere :refer :all]))
 

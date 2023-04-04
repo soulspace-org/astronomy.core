@@ -10,7 +10,7 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.earth
+(ns org.soulspace.astronomy.earth
   (:require [org.soulspace.math.core :as m]))
 
 ;; References:

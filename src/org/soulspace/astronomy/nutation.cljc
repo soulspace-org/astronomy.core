@@ -10,10 +10,10 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.nutation
+(ns org.soulspace.astronomy.nutation
   (:require [org.soulspace.math.core :as m]
-            [org.soulspace.clj.astronomy.time :as time]
-            [org.soulspace.clj.astronomy.angle :as angle]))
+            [org.soulspace.astronomy.time :as time]
+            [org.soulspace.astronomy.angle :as angle]))
 
 ;;;;
 ;;;; Functions for the calculation nutation and the obliquity of the ecliptic.

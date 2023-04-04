@@ -10,7 +10,7 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.clj.astronomy.magnitude
+(ns org.soulspace.astronomy.magnitude
   (:require [org.soulspace.math.core :as m]))
 
 ;;;
@@ -87,3 +87,8 @@
   "Calculates the magnitudes per square arc minute from the magnitudes per square arc degree."
   [mag-per-°²]
   (+ mag-per-°² 8.89))
+
+(defprotocol Magnitude
+  (magnitude [this] [this time] [this time location]
+             "Returns the magnitude."))
+
