@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 0.4.3
+-------------
+* dropped 'clj' from namespace
+* merged namespaces
+* refactored and enhanced abstractions
+* added tests
+
 Version 0.4.2
 -------------
 * added Instant protocol with implementation JulianDay
