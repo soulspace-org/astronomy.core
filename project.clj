@@ -10,6 +10,7 @@
 ;  :lein-tools-deps/config {:config-files [:install :user :project]}
 
   :dependencies [[org.clojure/clojure "1.11.1"]
+                 [org.clojure/spec.alpha "0.3.218"]
                  [org.soulspace.clj/clj.base "0.9.0"]
                  [org.soulspace.clj/math.core "0.9.0"]]
 

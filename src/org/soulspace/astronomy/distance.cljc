@@ -10,7 +10,8 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.astronomy.distance)
+(ns org.soulspace.astronomy.distance
+  (:require [clojure.spec.alpha :as s]))
 
 ;;;
 ;;; Functions for astronomical distances
@@ -22,8 +23,6 @@
 (def ^:const LY_AU "Light year [au]" 63241.077)
 (def ^:const PC_M "Parsec (Parallax second) [m]" 96939420213600000)
 (def ^:const PC_LY "Parsec (Parallax second) [ly]" 3.2616)
-
-(def distance-units #{::m ::km ::au ::ly ::pc})
 
 (defn meters-to-astronomical-units
   "Converts the distance given in meters to astronomical units."
@@ -85,9 +84,14 @@
   [d]
   (* d PC_LY))
 
-; TODO move protocols and record in a domain layer
+;;
+;; Distance abstractions
+;;
 
 (declare convert-distance)
+
+(s/def ::distance-units #{::m ::km ::au ::ly ::pc})
+(def distance-units #{::m ::km ::au ::ly ::pc})
 
 (defprotocol IDistance
   (as-unit [this unit] "Returns the distance in the given unit.")
@@ -177,6 +181,8 @@
 (defmethod convert-distance [::pc ::ly] [dist _]
   (->Distance (* (:value dist) PC_LY) ::ly))
 
+(def ONE_M (->Distance 1 ::m))
+(def ONE_KM (->Distance 1 ::km))
 (def ONE_AU (->Distance 1 ::au))
 (def ONE_LY (->Distance 1 ::ly))
 (def ONE_PC (->Distance 1 ::pc))

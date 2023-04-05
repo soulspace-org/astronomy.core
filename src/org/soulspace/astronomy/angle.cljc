@@ -118,7 +118,7 @@
 ;; TODO add specs, add modulo 360, 2*pi, 24 on respective constructors
 ;; TODO add angle operations: +, - (*, /)?
 
-
+(s/def ::angle-units #{::rad ::deg ::arcmin ::arcsec ::hour-angle ::dms ::hms})
 (def angle-units #{::rad ::deg ::arcmin ::arcsec ::hour-angle ::dms ::hms})
 (declare convert-angle)
 
