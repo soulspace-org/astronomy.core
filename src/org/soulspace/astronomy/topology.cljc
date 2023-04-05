@@ -102,3 +102,9 @@
          H2 (/ (+ (* 3 R) 1) (* 2 S))
          s (* D (+ 1 (* flattening H1 (m/sqr (m/sin F)) (m/sqr (m/cos G))) (* -1 flattening H2 (m/sqr (m/cos F)) (m/sqr (m/sin G)))))]
      s)))
+
+(defprotocol ITopologicalCoordinate
+  )
+
+(defprotocol ITopologicalBody
+  )

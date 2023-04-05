@@ -245,7 +245,7 @@
 ;;; Protocols and types for coordinates
 ;;;
 
-(defprotocol ICoordinate
+(defprotocol ICelestialCoordinate
   "Protocol for coordinate systems."
   (equatorial [this] [this jd location] "Returns the equtorial coordinates (RA/Dec).")
   (horizontal [this] [this jd location] "Returns the horizontal coordinates (Alt/Az).") 
@@ -253,8 +253,13 @@
   ; (galactical [obj] [obj time] "Returns the galactical coordinates.")
   )
 
+(comment ; TODO implement analog to Angle and Distance
+  (defrecord CelestialCoordinate [value unit]
+    ICelestialCoordinate)
+ )
+
 (defrecord EquatorialCoordinate [ra dec]
-  ICoordinate
+  ICelestialCoordinate
   (equatorial [this] [ra dec])
   (equatorial [this jd location])   ; TODO implement
   (horizontal [this])               ; TODO implement
@@ -263,7 +268,7 @@
   (ecliptical [this jd location]))  ; TODO implement
 
 (defrecord HorizontalCoordinate [alt az]
-  ICoordinate
+  ICelestialCoordinate
   (equatorial [this])               ; TODO implement
   (equatorial [this jd location])   ; TODO implement
   (horizontal [this] [alt az])
@@ -272,7 +277,7 @@
   (ecliptical [this jd location]))  ; TODO implement
 
 (defrecord EclipticalCoordinate [lat long]
-  ICoordinate
+  ICelestialCoordinate
   (equatorial [this])               ; TODO implement
   (equatorial [this jd location])   ; TODO implement
   (horizontal [this])               ; TODO implement
