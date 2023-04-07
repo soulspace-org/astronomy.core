@@ -1,6 +1,10 @@
 Changelog
 =========
 
+Version 0.4.4
+-------------
+
+
 Version 0.4.3
 -------------
 * dropped 'clj' from namespace
