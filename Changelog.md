@@ -7,6 +7,7 @@ Version 0.4.3
 * merged namespaces
 * refactored and enhanced abstractions
 * added tests
+* added dev profile to project.clj
 
 Version 0.4.2
 -------------

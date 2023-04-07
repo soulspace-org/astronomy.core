@@ -1,4 +1,4 @@
-(defproject org.soulspace.clj/astronomy.core "0.4.3-SNAPSHOT"
+(defproject org.soulspace.clj/astronomy.core "0.4.3"
   :description "A library of astronomical algorithms in clojure"
   :url "https://github.com/soulspace-org/astronomy.core"
   :license {:name "Eclipse Public License"
@@ -16,7 +16,8 @@
 
   :test-paths ["test"]
 
-  :profiles {:dev {:dependencies [[djblue/portal "0.37.1"]]
+  :profiles {:dev {:dependencies [[djblue/portal "0.37.1"]
+                                  [criterium "0.4.6"]]
                    :global-vars {*warn-on-reflection* true}}}
 
   :scm {:name "git" :url "https://github.com/soulspace-org/astronomy.core"}
