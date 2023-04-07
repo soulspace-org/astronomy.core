@@ -2,9 +2,15 @@ astronomy.core
 ==============
 The astronomy.core library is a Clojure/ClojureScript library for astronomical calculations.
 
+Usage
+-----
+Add the dependency:
+
+[![Clojars Project](https://img.shields.io/clojars/v/org.soulspace.clj/astronomy.core.svg)](https://clojars.org/org.soulspace.clj/astronomy.core)
+
 Copyright
 ---------
-(c) 2011-2023 Ludger Solbach
+© 2011-2023 Ludger Solbach
 
 License
 -------
@@ -14,16 +20,3 @@ Code Repository
 ---------------
 [https://github.com/soulspace-org/astronomy.core] (https://github.com/soulspace-org/astronomy.core)
 
-History
--------
-
-Version 0.4.0
--------------
-* added Clojurescript support
-* refactored namespaces
-* docmentation and test enhancements
-* bug fixes
-
-Version 0.1.0
--------------
-* Initial import
