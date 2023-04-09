@@ -95,6 +95,23 @@
     (* r (m/cos beta) (m/sin lambda))
     (* r (m/sin beta))]))
 
+;; location in orbital plane 
+(defn location-orbital-plane-spherical
+  "Returns the location of a body in spherical coordinates
+  of the plane of it's orbit given the cartesian coordinates 'x' and 'y'."
+  [x y]
+  ; TODO implement
+  ;((m/acos (x))) (())
+  )
+
+(defn location-orbital-plane-cartesian
+  "Returns the location of a body in cartesian coordinates
+   of the plane of it's orbit given 'r' as the distance from the sun
+   and 'u' as the angle from the ascending node."
+  [r u]
+  [(* r (m/cos u))(* r (m/sin u))])
+
+
 
 ;;;
 ;;; implementations of spherical projections, no ellipsoid projections implemented yet
@@ -257,30 +274,3 @@
   (defrecord CelestialCoordinate [value unit]
     ICelestialCoordinate)
  )
-
-(defrecord EquatorialCoordinate [ra dec]
-  ICelestialCoordinate
-  (equatorial [this] [ra dec])
-  (equatorial [this jd location])   ; TODO implement
-  (horizontal [this])               ; TODO implement
-  (horizontal [this jd location])   ; TODO implement
-  (ecliptical [this])               ; TODO implement
-  (ecliptical [this jd location]))  ; TODO implement
-
-(defrecord HorizontalCoordinate [alt az]
-  ICelestialCoordinate
-  (equatorial [this])               ; TODO implement
-  (equatorial [this jd location])   ; TODO implement
-  (horizontal [this] [alt az])
-  (horizontal [this jd location])   ; TODO implement
-  (ecliptical [this])               ; TODO implement
-  (ecliptical [this jd location]))  ; TODO implement
-
-(defrecord EclipticalCoordinate [lat long]
-  ICelestialCoordinate
-  (equatorial [this])               ; TODO implement
-  (equatorial [this jd location])   ; TODO implement
-  (horizontal [this])               ; TODO implement
-  (horizontal [this jd location])   ; TODO implement
-  (ecliptical [this] [lat long])
-  (ecliptical [this jd location]))  ; TODO implement
