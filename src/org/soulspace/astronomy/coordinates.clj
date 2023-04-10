@@ -125,7 +125,7 @@
 ;;; R      -> radius of the sphere (either actual or corresponding to the scale of the map)
 ;;; k0     -> relative scale factor along a parallel of latitude
 
-;; TODO maybe add simplifications for long-0 or lat-0 = 0 or 90 degrees
+;; TODO add simplifications for long-0 or lat-0 = 0 or 90 degrees
 
 (defn stereographic-projection
   "Calculates the stereographic projection of the coordinates of long and lat
@@ -169,7 +169,8 @@
      [long lat])))
 
 (defn stereographic-projector
-  "Returns a function for stereographic projections."
+  "Returns a partial function for performing a stereographic projection of the
+   coordinates of long and lat for a map centered on the coordinates long-0 and lat-0."
   ([R]
    (partial stereographic-projection R))
   ([R k-0]
@@ -180,7 +181,9 @@
    (partial stereographic-projection R k-0 long-0 lat-0)))
 
 (defn reverse-stereographic-projector
-  "Returns a function for reverse stereographic projections."
+  "Returns a partial function for reverse stereographic projection of x and y
+   in a reversed stereographic projection for a map centered on the coordinates
+   long-0 and lat-0."
   ([R]
    (partial reverse-stereographic-projection R))
   ([R k-0]
@@ -191,8 +194,8 @@
    (partial reverse-stereographic-projection R k-0 long-0 lat-0)))
 
 (defn orthographic-projection
-  "Calculates the orthographic projection of the coordinates of the coordinates of long and lat
-   for a map centered on the coordinates long-0 and lat-0."
+  "Calculates the orthographic projection of the coordinates of the coordinates
+   of long and lat for a map centered on the coordinates long-0 and lat-0."
   ([R [long-0 lat-0] [long lat]]
    (orthographic-projection R long-0 lat-0 long lat))
   ([R long-0 lat-0 long lat]
@@ -228,7 +231,8 @@
      [long lat])))
 
 (defn orthographic-projector
-  "Returns a function for orthographic projections."
+  "Returns a partial function for orthographic projection of the coordinates
+   of long and lat for a map centered on the coordinates long-0 and lat-0."
   ([R]
    (partial orthographic-projection R))
   ([R [long-0 lat-0]]
@@ -237,7 +241,9 @@
    (partial orthographic-projection R long-0 lat-0)))
 
 (defn reverse-orthographic-projector
-  "Returns a function for reverse orthographic projections."
+  "Returns a partial function for reverse orthographic projection of x and y
+   in a reversed stereographic projection for a map centered on the coordinates
+   long-0 and lat-0."
   ([R]
    (partial reverse-orthographic-projection R))
   ([R [long-0 lat-0]]
