@@ -4,6 +4,7 @@ Changelog
 Version 0.4.4
 -------------
 * added coordinates functions
+* enhanced docstrings
 
 
 Version 0.4.3
