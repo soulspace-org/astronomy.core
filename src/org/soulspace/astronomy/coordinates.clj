@@ -111,10 +111,8 @@
   [r u]
   [(* r (m/cos u))(* r (m/sin u))])
 
-
-
 ;;;
-;;; implementations of spherical projections, no ellipsoid projections implemented yet
+;;; Implementations of spherical projections, no ellipsoid projections implemented yet
 ;;;
 ;;; References:
 ;;; Snyder, John P.; Map Projections - A Working Manual; USGS Professional Paper 1395
@@ -263,6 +261,23 @@
   "Calculates the coordinates in a reversed mercator projection."
   []
   (let []))
+
+;;;
+;;; Proper motion
+;;;
+
+(defn proper-motion
+  "Returns the new ccordinates of a star with proper motion applied.
+
+   'T' - the epoch for which the coordinates are given,
+   't' - the epoch for which the coordinates should be calculated,
+   'dt' - the delta t in years for which the coordinates should be calculated,
+   'c' - vector of coordinates at epoch 'T' in the form ['ra' 'dec'],
+   'pm' - vector of proper motion per year in the form ['pm-ra' 'pm-dec']"
+  ([dt [ra dec] [pm-ra pm-dec]]
+   [(+ ra (* dt pm-ra)) (+ dec (* dt pm-dec))])
+  ([T t c pm]
+   (proper-motion (- t T) c pm)))
 
 ;;;
 ;;; Protocols and types for coordinates

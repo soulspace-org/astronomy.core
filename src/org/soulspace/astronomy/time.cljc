@@ -375,6 +375,7 @@
   ([date]
    (JulianDay. (milliseconds-to-julian-day (date-to-milliseconds date)))))
 
+
 (defprotocol Epoch
   "Protocol for Epochs."
   (to-julian-epoch [this] [this year] [this year type])

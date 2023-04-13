@@ -26,7 +26,7 @@
   (+ 3.07496 (* 0.00186 t)))
 
 (defn calc-n
-  "Calculates m in seconds for t in centuries from 2000.0."
+  "Calculates n in seconds for t in centuries from 2000.0."
   [t]
   (- 1.33621 (* 0.00057 t)))
 
@@ -38,5 +38,46 @@
   [t [ra dec]]
   (let [m (calc-m t)
         n (calc-n t)]
-   {:delta-ra (+ m (* n (m/sin ra) (m/tan dec)))
-    :delta-dec (* 15 n (m/cos ra))}))
+   [(+ m (* n (m/sin ra) (m/tan dec)))
+    (* 15 n (m/cos ra))]))
+
+
+(defn- calc-zeta
+  [T t]
+  (+ (* (+ 2306.2181 (* 1.39656 T) (* -0.000139 (m/sqr T))) t)
+     (* (+ 0.30188 (* -0.000344 T)) (m/sqr t))
+     (* 0.017998 (m/cube t))))
+
+(defn- calc-z
+  [T t]
+  (+ (* (+ 2306.2181 (* 1.39656 T) (* -0.000139 (m/sqr T))) t)
+     (* (+ 1.09468 (* 0.000066 T)) (m/sqr t))
+     (* 0.018203 (m/cube t))))
+
+(defn- calc-theta
+  [T t]
+  (- (* (+ 2004.3109 (* 0.85330 T) (* -0.000217 (m/sqr T))) t)
+     (* (+ 0.42665 (* 0.000217 T)) (m/sqr t))
+     (* 0.041833 (m/cube t))))
+
+(defn annual-precession
+  "Calculates the annual precession with high accuracy."
+  ([t [ra dec]]
+   (let [zeta  (+ (* 2306.2181 t) (* 0.30188 (m/sqr t)) (* 0.017998 (m/cube t)))
+         z     (+ (* 2306.2181 t) (* 1.09468 (m/sqr t)) (* 0.018203 (m/cube t)))
+         theta (- (* 2004.3109 t) (* 0.42665) (m/sqr t) (* 0.041833 (m/cube t)))]))
+  ([T t [ra dec]]
+   (let [zeta  (calc-zeta T t)
+         z     (calc-z T t)
+         theta (calc-theta T t)]))
+  ([T t zeta z theta [ra dec]]
+   (let [A (* (m/cos dec) (m/sin (+ ra zeta)))
+         B (- (* (m/cos theta) (m/cos dec) (m/cos (+ ra zeta))) (* (m/sin theta) (m/sin dec)))
+         C (+ (* (m/sin theta) (m/cos dec) (m/cos (+ ra zeta))) (* (m/cos theta) (m/sin dec)))
+         a (+ (m/atan2 A B) z)
+         d (if (< 1.4 (abs dec))
+                 ; near the pole
+                 (m/acos (m/sqrt (+ (m/sqr A) (m/sqr B))))
+                 ; else
+                 (m/asin C))]
+     [a d])))

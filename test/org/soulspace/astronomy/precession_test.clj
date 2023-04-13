@@ -22,8 +22,19 @@
 (deftest calc-n-test
   (is (utils/within-error-margin 1.336 (calc-n 0) 0.001)))
 
-(def ap (annual-precession-low-accuracy 0 [(a/hms-to-rad "10h08m22.3s")
+; coordinates of Regulus
+(def ap-low (annual-precession-low-accuracy 0 [(a/hms-to-rad "10h08m22.3s")
                                            (a/dms-to-rad "11°58'02\"")]))
+
+(def ap-high (annual-precession 0 [(a/hms-to-rad "10h08m22.3s")
+                                           (a/dms-to-rad "11°58'02\"")]))
+
 (deftest annual-precession-low-accuracy-test
-  (is (utils/within-error-margin   3.208 (:delta-ra  ap) 0.001)
-      (utils/within-error-margin -17.71  (:delta-dec ap) 0.01)))
+  (is (utils/within-error-margin   3.208 (first ap-low) 0.001)
+      (utils/within-error-margin -17.71  (second ap-low) 0.01)))
+
+(deftest annual-precession-high-accuracy-test
+  (is (utils/within-error-margin   3.208 (first ap-high) 0.001)
+      (utils/within-error-margin -17.71  (second ap-high) 0.01)))
+
+
