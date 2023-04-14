@@ -25,8 +25,8 @@
 (deftest mean-obliquity-test
   (testing "Testing mean obliquity with low accuracy"
     (is (utils/within-error-margin
-         23.440946 (mean-obliquity 2446895.5))))
+         23.440946 (mean-obliquity (time/julian-centuries 2446895.5)))))
   (testing "Testing mean obliquity with low accuracy"
     (is (utils/within-error-margin
-         23.440946 (mean-obliquity-high-accuracy 2446895.5)))))
+         23.440946 (mean-obliquity-high-accuracy (time/julian-centuries 2446895.5))))))
 
