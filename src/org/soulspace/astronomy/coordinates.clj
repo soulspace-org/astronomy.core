@@ -263,21 +263,67 @@
   (let []))
 
 ;;;
-;;; Proper motion
+;;; Apparent place of a star
 ;;;
+;;; apply proper motion
+;;; apply precession
+;;; apply annual abberation
+;;; (apply annual parallax)
+;;; (apply gravitational deflection of light)
 
 (defn proper-motion
   "Returns the new ccordinates of a star with proper motion applied.
 
-   'T' - the epoch for which the coordinates are given,
-   't' - the epoch for which the coordinates should be calculated,
+   'T'  - the epoch for which the coordinates are given,
+   't'  - the epoch for which the coordinates should be calculated,
    'dt' - the delta t in years for which the coordinates should be calculated,
-   'c' - vector of coordinates at epoch 'T' in the form ['ra' 'dec'],
+   'c'  - vector of coordinates at epoch 'T' in the form ['ra' 'dec'],
    'pm' - vector of proper motion per year in the form ['pm-ra' 'pm-dec']"
   ([dt [ra dec] [pm-ra pm-dec]]
    [(+ ra (* dt pm-ra)) (+ dec (* dt pm-dec))])
   ([T t c pm]
    (proper-motion (- t T) c pm)))
+
+(defn eccentricity-earth-orbit
+  "Calculates the eccentricity of the orbit of the earth
+   for the given time 'T' in julian centuries from J2000.0."
+  [T]
+  (- 0.016708634 (* 0.000042037 T) (* 0.0000001267 (m/sqr T))))
+
+(defn mean-longitude-sun
+  "Calculates the mean longitude of the sun
+   for the given time 'T' in julian centuries from J2000.0."
+  [T]
+  (+ 280.46646 (* 36000.76983 T) (* 0.0003032 (m/sqr T))))
+
+(defn mean-anomaly-sun
+  "Calculates the mean anomaly of the sun
+   for the given time 'T' in julian centuries from J2000.0."
+  [T]
+  (+ 357.52911 (* 35999.05029 T)  (* -0.0001537 (m/sqr T))))
+
+(defn true-longitude-of-sun
+  "Calculates the true (geometric) longitude of the sun
+   for the given time 'T' in julian centuries from J2000.0."
+  ([T]
+   (true-longitude-of-sun (eccentricity-earth-orbit T) T))
+  ([e T]
+   (let [L0 (mean-longitude-sun T)
+         M  (mean-anomaly-sun T)]
+     )))
+
+(defn annual-abberation
+  "Calculates the annual abberation at time."
+  [T]
+  (let [e (eccentricity-earth-orbit T)
+        l-sun (true-longitude-of-sun T)
+        pi (+ 102.93735 (* 1.71946 T) (* 0.00046 (m/sqr T)))]
+    ))
+
+(defn apparent-star-position
+  ""
+  [T c]
+  )
 
 ;;;
 ;;; Protocols and types for coordinates
