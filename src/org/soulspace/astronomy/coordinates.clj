@@ -14,7 +14,8 @@
   "Coordinates functions and abstractions."
   (:require [org.soulspace.math.core :as m]
             [org.soulspace.astronomy.time :as time]
-            [org.soulspace.astronomy.angle :as a]))
+            [org.soulspace.astronomy.angle :as a]
+            [org.soulspace.astronomy.nutation :as n]))
 
 ;;;
 ;;; Coordinates functions and abstractions
@@ -266,11 +267,6 @@
 ;;;
 ;;; Apparent place of a star
 ;;;
-;;; apply proper motion
-;;; apply precession
-;;; apply annual abberation
-;;; (apply annual parallax)
-;;; (apply gravitational deflection of light)
 
 (defn proper-motion
   "Returns the new ccordinates of a star with proper motion applied.
@@ -372,9 +368,31 @@
   ([T [ra dec]]
    (let [e (eccentricity-earth-orbit T)
          l-sun (m/deg-to-rad (true-longitude-of-sun T))
-         pi (m/deg-to-rad (longitude-earth-perihelion T))]
-     ; TODO
-     [])))
+         pi (m/deg-to-rad (longitude-earth-perihelion T))
+         epsilon (n/true-obliquity T)
+         d-ra (+ (* -1 kappa (/ (+ (* (m/cos ra) (m/cos l-sun) (m/cos epsilon))
+                                   (* (m/sin ra) (m/sin l-sun)))
+                                (m/cos dec)))
+                 (* e kappa (/ (+ (* (m/cos ra) (m/cos pi) (m/cos epsilon))
+                                  (* (m/sin ra) (m/sin pi)))
+                               (m/cos dec))))
+         d-dec (+ (* -1 kappa (+ (* (m/cos l-sun) (m/cos epsilon)
+                                    (- (* (m/tan epsilon) (m/cos dec))
+                                       (* (m/sin ra) (m/sin dec))))
+                                 (* (m/cos ra) (m/sin dec) (m/sin l-sun))))
+                  (* e kappa (+ (* (m/cos pi) (m/cos epsilon)
+                                   (- (* (m/tan epsilon) (m/cos dec))
+                                      (* (m/sin ra) (m/sin dec))))
+                                (* (m/cos ra) (m/sin dec) (m/sin pi)))))]
+     [d-ra d-dec])))
+
+;; TODO add tests
+
+; apply proper motion
+; apply precession
+; apply annual abberation
+; (apply annual parallax)
+; (apply gravitational deflection of light)
 
 (defn apparent-star-position
   ""

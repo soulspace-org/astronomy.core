@@ -64,18 +64,18 @@
 
 (defn longitude-ascending-node-moon
   "Calculates the longitude of ascending node of the moons mean orbit on the
-  ecliptic in degrees at the given instant 'T' in julian centuries from J2000.0,
+  ecliptic in degrees, at the given instant 'T' in julian centuries from J2000.0, 
   measured from the mean equinox of the date."
   [T]
   (+ 125.04452M (* -1934.136261M T) (* 0.0020708M (m/sqr T)) (/ (* (m/cube T))
                                                                 450000M)))
 
 (defn nutation-in-longitude
-  "Calculates the nutation in longitude (delta psi) in arc seconds for the
-  julian ephemerides day with an accuracy of 0.5 arc seconds. "
-  [jde]
-  (let [T (time/julian-centuries jde)
-        omega (longitude-ascending-node-moon T)
+  "Calculates the nutation in longitude (delta psi) in arc seconds 
+   at the given instant 'T' in julian centuries from J2000.0
+   with an accuracy of 0.5 arc seconds. "
+  [T]
+  (let [omega (longitude-ascending-node-moon T)
         l-sun (mean-longitude-sun T)
         l-moon (mean-longitude-moon T)]
     ; TODO test
@@ -83,11 +83,11 @@
        (* -0.23 (m/sin (* 2 l-moon))) (* 0.21 (m/sin (* 2 omega))))))
 
 (defn nutation-in-obliquity
-  "Calculates the nutation in obliquity (delta epsilon) in arc seconds for the
-  julian ephemerides day with an accuracy of 0.1 arc seconds."
-  [jde]
-  (let [T (time/julian-centuries jde)
-        omega (longitude-ascending-node-moon T)
+  "Calculates the nutation in obliquity (delta epsilon) in arc seconds,
+   at the given instant 'T' in julian centuries from J2000.0,
+   with an accuracy of 0.1 arc seconds."
+  [T]
+  (let [omega (longitude-ascending-node-moon T)
         l-sun (mean-longitude-sun T)
         l-moon (mean-longitude-moon T)]
     ; TODO test
@@ -99,24 +99,25 @@
 
 (defn mean-obliquity
   "Calculates the mean obliquity of the ecliptic (the inclination of the
-  earth's axis) for the julian ephemerides day. The error is about
-  1 arc second over a period of 2000 years and 10 arc seconds over a
-  period of 4000 years."
-  [jde]
-  (let [T (time/julian-centuries jde)]
-        ; TODO convert to deg and use the deg values here
-       (+ obliquity_J2000
-          (* -1 (angle/dms-to-deg "0°0'46.8150\"") T)
-          (* -1 (angle/dms-to-deg "0°0'0.00059\"") (m/sqr T))
-          (* (angle/dms-to-deg "0°0'0.001813\"") (m/cube T)))))
+  earth's axis)  at the given instant 'T' in julian centuries from J2000.0.
+  The error is about 1 arc second over a period of 2000 years and 10 arc seconds
+  over a period of 4000 years."
+  [T]
+  ; TODO convert to deg and use the deg values here
+  (+ obliquity_J2000
+     (* -1 (angle/dms-to-deg "0°0'46.8150\"") T)
+     (* -1 (angle/dms-to-deg "0°0'0.00059\"") (m/sqr T))
+     (* (angle/dms-to-deg "0°0'0.001813\"") (m/cube T))))
 
 (defn mean-obliquity-high-accuracy
   "Calculates the mean obliquity of the ecliptic (the inclination of the
-  earth's axis) for the julian ephemerides day with high accuracy.
+  earth's axis), at the given instant 'T' in julian centuries from J2000.0,
+  with high accuracy.
+  
   The error is about 0.01 arc second over a period of 2000 years and
   a few arc seconds over a period of 20000 years."
-  [jde]
-  (let [u (/ (time/julian-centuries jde)
+  [T]
+  (let [u (/ T
              100)]
     (+ obliquity_J2000
        (* -1 (angle/dms-to-deg "0°0'4680.93\"") u)
@@ -132,21 +133,24 @@
 
 (defn true-obliquity
   "Calculates the true obliquity of the ecliptic (the inclination of the
-  earth's axis) for the julian ephemerides day. The error is about
-  1 arc second over a period of 2000 years and 10 arc seconds over a
+  earth's axis)  at the given instant 'T' in julian centuries from J2000.0.
+  
+  The error is about 1 arc second over a period of 2000 years and 10 arc seconds over a
   period of 4000 years."
-  [jde]
-  (+ (mean-obliquity jde) (nutation-in-obliquity jde)))
+  [T]
+  (+ (mean-obliquity T) (nutation-in-obliquity T)))
 
 (comment
 (defn true-obliquity-high-accuracy
   "Calculates the mean obliquity of the ecliptic (the inclination of the
-  earth's axis) for the julian ephemerides day with high accuracy.
+  earth's axis), at the given instant 'T' in julian centuries from J2000.0,
+  with high accuracy.
+  
   The error is about 0.01 arc second over a period of 2000 years and
   a few arc seconds over a period of 20000 years."
-  [jde]
+  [T]
   ; TODO implement high accuracy variant of nutation functions
-  (+ (mean-obliquity-high-accuracy jde) (nutation-in-obliquity jde)))
+  (+ (mean-obliquity-high-accuracy T) (nutation-in-obliquity T)))
 )
 
 (comment
