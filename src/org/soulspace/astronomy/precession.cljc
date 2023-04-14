@@ -60,8 +60,8 @@
      (* (+ 0.42665 (* 0.000217 T)) (m/sqr t))
      (* 0.041833 (m/cube t))))
 
-(defn annual-precession
-  "Calculates the annual precession with high accuracy."
+(defn precession
+  "Calculates the precession with high accuracy."
   ([t [ra dec]]
    (let [zeta  (+ (* 2306.2181 t) (* 0.30188 (m/sqr t)) (* 0.017998 (m/cube t)))
          z     (+ (* 2306.2181 t) (* 1.09468 (m/sqr t)) (* 0.018203 (m/cube t)))

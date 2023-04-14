@@ -27,21 +27,28 @@
   )
 
 (defn hms-to-ha
-  "Converts an hour angle given in hours minutes and seconds into a hour angle given in decimal hours."
+  "Converts an hour angle given in hours minutes and seconds
+   into a hour angle given in decimal hours."
   ([hms]
    (cond
      (map? hms)
      (hms-to-ha {:h hms} {:min hms} {:sec hms})
      (string? hms)
-     (let [[_ h min sec] (re-matches hms-pattern hms)]
-       (hms-to-ha (parse-long h) (parse-long min) (parse-double sec)))))
+     (let [[_ h min sec] (re-matches hms-pattern hms)
+           ;_ (println h min sec)
+           hour    (if (seq h) (parse-long h) 0)
+           minutes (if (seq min) (parse-long min) 0)
+           seconds (if (seq sec) (parse-double sec) 0.0)]
+       (hms-to-ha hour minutes seconds))))
   ([h min]
    (hms-to-ha h min 0.0))
   ([h min sec]
+   ;(println h min sec)
    (+ h (/ min 60) (/ sec 3600.0))))
 
 (defn ha-to-hms
-  "Converts an hour angle given in decimal hours in an hour angle in hours, minutes and seconds."
+  "Converts an hour angle given in decimal hours
+   in an hour angle in hours, minutes and seconds."
   [ha]
   (let [h (long (m/floor ha))
         hf (rem ha 1)
@@ -68,13 +75,35 @@
   [a]
   (/ (mod a 360) 15))
 
-(defn hms-to-rad
-  "Converts an hour angle given in hours minutes and seconds into an angle given in radians."
+(defn hms-to-deg
+  "Converts an hour angle given in hours, minutes and seconds
+   into an angle given in decimal degrees."
   [hms]
-  (m/deg-to-rad (ha-to-deg (hms-to-ha hms))))
+  (-> hms
+      hms-to-ha
+      ha-to-deg))
+
+(defn hms-to-rad
+  "Converts an hour angle given in hours, minutes and seconds
+   into an angle given in radians."
+  [hms]
+  (-> hms
+      hms-to-ha
+      ha-to-deg
+      m/deg-to-rad))
+
+(defn rad-to-hms
+  "Converts an angle given in radians into an hour angle
+   given in hours, minutes and seconds."
+  [a]
+  (-> a
+      m/rad-to-deg
+      deg-to-ha
+      ha-to-hms))
 
 (defn dms-to-deg
-  "Converts an angle given in degrees, minutes and seconds into an angle given in decimal degrees."
+  "Converts an angle given in degrees, minutes and seconds
+   into an angle given in decimal degrees."
   ([dms]
    (cond
      (map? dms)
@@ -92,7 +121,8 @@
    (* sgn (+ deg (/ min 60) (/ sec 3600.0)))))
 
 (defn deg-to-dms
-  "Converts an angle given in decimal degrees into an angle given in degrees, minutes and seconds."
+  "Converts an angle given in decimal degrees into an angle
+   given in degrees, minutes and seconds."
   [a]
   (let [abs-a (abs a)
         af (rem abs-a 1)
@@ -103,9 +133,16 @@
      :sec (* mf 60.0)}))
 
 (defn dms-to-rad
-  "Converts an angle given in degrees, minutes and seconds into an angle given in radians."
+  "Converts an angle given in degrees, minutes and seconds
+   into an angle given in radians."
   [dms]
   (m/deg-to-rad (dms-to-deg dms)))
+
+(defn rad-to-dms
+  "Converts an angle given in radians to an angle
+   given in degrees, minutes and seconds."
+  [a]
+  (deg-to-dms (m/rad-to-deg a)))
 
 (defn dms-string
   "Returns the string representation of the hour angle."

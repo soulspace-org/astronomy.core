@@ -70,19 +70,32 @@
   (is (= (m/deg-to-rad 80) (zenit-distance-by-altitude (m/deg-to-rad 10))))
   (is (= (m/deg-to-rad 45) (zenit-distance-by-altitude (m/deg-to-rad 45)))))
 
+(def Regulus [(a/hms-to-rad "10h08m22.3s")
+              (a/dms-to-rad "11°58'02\"")])
+
+(def Regulus-PM [(a/hms-to-rad "-0h0m0.0169s")
+                 (a/dms-to-rad "0°0'0.006\"")])
+
 (def theta-Persei [(a/hms-to-rad "2h44m11.968s")
                    (a/dms-to-rad "49°13'42.48\"")])
 
 (def theta-Persei-PM [(a/hms-to-rad "0h0m0.03425s")
                       (a/dms-to-rad "-0°0'0.0895\"")])
 
+; TODO check
 (deftest proper-motion-test
-  (testing "Proper motion of theta Persei"
-    (let [[ra dec] (proper-motion 28.86705 theta-Persei theta-Persei-PM)]
-      (is (utils/within-error-margin 41.054063 (m/rad-to-deg ra)))
-      (is (utils/within-error-margin 49.227750 (m/rad-to-deg dec))))))
+  (let [reg (proper-motion -22 Regulus Regulus-PM)
+        theta (proper-motion 28.86705 theta-Persei theta-Persei-PM)]
+    (testing "Proper motion of Regulus"
+      (is (utils/within-error-margin 152.092917 (m/rad-to-deg (first reg)) 0.00001))
+      (is (utils/within-error-margin 11.967186 (m/rad-to-deg (second reg)) 0.00001)))
+    (testing "Proper motion of theta Persei"
+      (is (utils/within-error-margin 41.054063 (m/rad-to-deg (first theta))) 0.00001)
+      (is (utils/within-error-margin 49.227750 (m/rad-to-deg (second theta)) 0.00001)))))
 
 (comment
+  (* -22 -0.0169)
+  (* -22 0.006)
   (* 28.86705 0.03425)
   (* 28.86705 -0.0895)
   (run-tests)

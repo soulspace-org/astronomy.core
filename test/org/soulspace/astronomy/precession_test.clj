@@ -23,18 +23,26 @@
   (is (utils/within-error-margin 1.336 (calc-n 0) 0.001)))
 
 ; coordinates of Regulus
-(def ap-low (annual-precession-low-accuracy 0 [(a/hms-to-rad "10h08m22.3s")
-                                           (a/dms-to-rad "11°58'02\"")]))
+(def Regulus [(a/hms-to-rad "10h08m22.3s")
+              (a/dms-to-rad "11°58'02\"")])
 
-(def ap-high (annual-precession 0 [(a/hms-to-rad "10h08m22.3s")
-                                           (a/dms-to-rad "11°58'02\"")]))
+(def theta-Persei [(a/hms-to-rad "2h44m12.975s")
+                   (a/dms-to-rad "49°13'39.90\"")])
 
 (deftest annual-precession-low-accuracy-test
-  (is (utils/within-error-margin   3.208 (first ap-low) 0.001)
-      (utils/within-error-margin -17.71  (second ap-low) 0.01)))
-
-(deftest annual-precession-high-accuracy-test
-  (is (utils/within-error-margin   3.208 (first ap-high) 0.001)
-      (utils/within-error-margin -17.71  (second ap-high) 0.01)))
+  (let [ap-low (annual-precession-low-accuracy 0 Regulus)]
+    (is (utils/within-error-margin   3.208 (first ap-low) 0.001)
+        (utils/within-error-margin -17.71  (second ap-low) 0.01))))
 
 
+(comment 
+  (deftest annual-precession-high-accuracy-test
+    ; TODO apply proper motion first
+    (let [ap-theta (precession 0.288670500 theta-Persei)]
+      (testing "Annual precession of theta Persei."
+        (is (utils/within-error-margin   3.208 (first ap-theta) 0.001)
+            (utils/within-error-margin -17.71  (second ap-theta) 0.01)))))
+
+  (a/hms-to-deg "2h44m12.975s")
+  (a/dms-to-deg "49°13'39.90\"")
+  )

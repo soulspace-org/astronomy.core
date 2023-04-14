@@ -4,8 +4,10 @@ Changelog
 Version 0.4.4
 -------------
 * added coordinates functions
+* added proper motion
+* added annual precession with high precision
 * enhanced docstrings
-
+* added tests
 
 Version 0.4.3
 -------------
