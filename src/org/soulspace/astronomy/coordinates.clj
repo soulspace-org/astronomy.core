@@ -13,7 +13,8 @@
 (ns org.soulspace.astronomy.coordinates
   "Coordinates functions and abstractions."
   (:require [org.soulspace.math.core :as m]
-            [org.soulspace.astronomy.time :as time]))
+            [org.soulspace.astronomy.time :as time]
+            [org.soulspace.astronomy.angle :as a]))
 
 ;;;
 ;;; Coordinates functions and abstractions
@@ -291,34 +292,89 @@
   (- 0.016708634 (* 0.000042037 T) (* 0.0000001267 (m/sqr T))))
 
 (defn mean-longitude-sun
-  "Calculates the mean longitude of the sun
+  "Calculates the mean longitude of the sun in degrees
    for the given time 'T' in julian centuries from J2000.0."
   [T]
   (+ 280.46646 (* 36000.76983 T) (* 0.0003032 (m/sqr T))))
 
 (defn mean-anomaly-sun
-  "Calculates the mean anomaly of the sun
+  "Calculates the mean anomaly of the sun in degrees 
    for the given time 'T' in julian centuries from J2000.0."
   [T]
   (+ 357.52911 (* 35999.05029 T)  (* -0.0001537 (m/sqr T))))
 
-(defn true-longitude-of-sun
-  "Calculates the true (geometric) longitude of the sun
-   for the given time 'T' in julian centuries from J2000.0."
-  ([T]
-   (true-longitude-of-sun (eccentricity-earth-orbit T) T))
-  ([e T]
-   (let [L0 (mean-longitude-sun T)
-         M  (mean-anomaly-sun T)]
-     )))
+(defn center-of-sun
+  "Calculates the equation of the center of the sun in degrees 
+   for the given mean anomaly of the sun 'M' and
+   the given time 'T' in julian centuries from J2000.0."
+  [M T]
+  (let [m (m/deg-to-rad M)]
+    (+ (* (- 1.914602 (* 0.004817 T) (* 0.000014 (m/sqr T))) (m/sin m))
+       (* (- 0.019993 (* 0.000101 T)) (m/sin (* 2 m)))
+       (* 0.000289 (m/sin (* 3 m))))))
 
-(defn annual-abberation
-  "Calculates the annual abberation at time."
+(defn true-longitude-of-sun
+  "Calculates the true (geometric) longitude of the sun in degrees 
+   for the given time 'T' in julian centuries from J2000.0."
   [T]
-  (let [e (eccentricity-earth-orbit T)
-        l-sun (true-longitude-of-sun T)
-        pi (+ 102.93735 (* 1.71946 T) (* 0.00046 (m/sqr T)))]
-    ))
+  (let [L0 (mean-longitude-sun T)
+        M  (mean-anomaly-sun T)
+        C  (center-of-sun M T)]
+    (+ L0 C)))
+
+(defn true-anomaly-of-sun
+  "Calculates the true anomaly of the sun in degrees 
+   for the given time 'T' in julian centuries from J2000.0."
+  [T]
+  (let [M  (mean-anomaly-sun T)
+        C  (center-of-sun M T)]
+    (+ M C)))
+
+(defn distance-sun-earth
+  "Calculates the radius vector R, the distance between the centers of sun and earth
+   in astronomical units for the given time 'T' in julian centuries from J2000.0
+   and the eccentricity 'e' of the orbit of the earth and the true anomaly
+   of the sun 'v'."
+  ([T]
+   (distance-sun-earth (eccentricity-earth-orbit T) (true-anomaly-of-sun T) T))
+  ([e v T]
+   (/ (* 1.000001018 (- 1 (m/sqr e)))
+      (+ 1 (* e (m/cos v))))))
+
+(defn longitude-earth-perihelion
+  "Calculates the longitude of the perihelion of the orbit of the earth
+  in degrees for the given time 'T' in julian centuries from J2000.0."
+  [T]
+  (+ 102.93735 (* 1.71946 T) (* 0.00046 (m/sqr T))))
+
+(def ^:const kappa "Constant of abberation [°]]." (a/dms-to-rad "0°0'20.49552\""))
+
+(defn annual-abberation-ecliptical
+  "Calculates the annual abberation in rad for the given time 'T'
+   in julian centuries from J2000.0. and the ecliptical coordinates
+   given as a vector 'v' in the form of ['lat' 'long'] in rad."
+  ([T [lat long]]
+   (let [e (eccentricity-earth-orbit T)
+         l-sun (m/deg-to-rad (true-longitude-of-sun T))
+         pi (m/deg-to-rad (longitude-earth-perihelion T))
+         d-long (/ (+ (* -1 kappa (m/cos (- l-sun long)))
+                      (* e kappa (m/cos (- pi long))))
+                   (m/cos lat))
+         d-lat (* -1 kappa (m/sin lat)
+                   (- (m/sin (- l-sun long))
+                      (* e (m/sin (- pi long)))))]
+     [d-lat d-long])))
+
+(defn annual-abberation-equatorial
+  "Calculates the annual abberation in rad for the given time 'T'
+   in julian centuries from J2000.0 and the equatorial coordinates
+   given as a vector 'v' in the form of ['ra' 'dec'] in rad."
+  ([T [ra dec]]
+   (let [e (eccentricity-earth-orbit T)
+         l-sun (m/deg-to-rad (true-longitude-of-sun T))
+         pi (m/deg-to-rad (longitude-earth-perihelion T))]
+     ; TODO
+     [])))
 
 (defn apparent-star-position
   ""
