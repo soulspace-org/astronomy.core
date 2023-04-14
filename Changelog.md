@@ -5,7 +5,8 @@ Version 0.4.4
 -------------
 * added coordinates functions
 * added proper motion
-* added annual precession with high precision
+* added precession with high precision
+* added apparent place of stars
 * enhanced docstrings
 * added tests
 
