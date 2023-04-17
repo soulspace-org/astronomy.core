@@ -15,12 +15,10 @@
   (:require [clojure.spec.alpha :as s]
             [org.soulspace.math.core :as m]))
 
-
 ; pattern for parsing an angle string given in signed degrees, minutes and seconds, e.g. -80° 7' 30\"
 (def dms-pattern #"(\+|-)?(\d+)°\s*(?:(\d+)'\s*(?:(\d+(?:\.\d+)?)\")?)?")
 ; pattern for parsing a hour angle string given in hours, minutes and seconds, e.g. 10h 7m 30s
 (def hms-pattern #"(\d+)h\s*(?:(\d+)m\s*(?:(\d+(?:\.\d+)?)s)?)?")
-
 
 (comment
   (re-matches dms-pattern "+180° 15'")
@@ -114,7 +112,10 @@
            deg (if (nil? deg) "0" deg)
            min (if (nil? min) "0" min)
            sec (if (nil? sec) "0" sec)]
-       (dms-to-deg (if (= sgn "-") -1 1) (parse-long deg) (parse-long min) (parse-double sec)))))
+       (dms-to-deg (if (= sgn "-") -1 1)
+                   (parse-long deg)
+                   (parse-long min)
+                   (parse-double sec)))))
   ([sgn deg min]
    (dms-to-deg sgn deg min 0.0))
   ([sgn deg min sec]
