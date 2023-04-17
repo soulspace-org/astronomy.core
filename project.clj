@@ -11,7 +11,7 @@
 
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.clojure/spec.alpha "0.3.218"]
-                 [org.soulspace.clj/clj.base "0.9.0"]
+                 [org.soulspace.clj/clj.base "0.9.1"]
                  [org.soulspace.clj/math.core "0.9.0"]]
 
   :test-paths ["test"]

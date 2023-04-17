@@ -30,9 +30,12 @@
   (^double [^double ra1 ^double dec1 ^double ra2 ^double dec2]
    (let [delta-ra (- ra1 ra2)
          delta-dec (- dec1 dec2)]
-     (if (or (< (abs (- (abs dec1) m/HALF-PI)) pi-ninetieth) (< (abs (- (abs dec2) m/HALF-PI)) pi-ninetieth))
-       (m/ahav (+ (m/hav delta-dec) (* (m/cos dec1) (m/cos dec2) (m/hav delta-ra)))) ; use haversine if declinations are near the poles
-       (m/acos (+ (* (m/sin dec1) (m/sin dec2)) (* (m/cos dec1) (m/cos dec2) (m/cos delta-ra))))))))
+     (if (or (< (abs (- (abs dec1) m/HALF-PI)) pi-ninetieth)
+             (< (abs (- (abs dec2) m/HALF-PI)) pi-ninetieth))
+       (m/ahav (+ (m/hav delta-dec)
+                  (* (m/cos dec1) (m/cos dec2) (m/hav delta-ra)))) ; use haversine if declinations are near the poles
+       (m/acos (+ (* (m/sin dec1) (m/sin dec2))
+                  (* (m/cos dec1) (m/cos dec2) (m/cos delta-ra))))))))
 
 (defn zenit-distance-by-altitude
   "Calculates the zenit distance by altitude (given in rad)."
@@ -163,9 +166,11 @@
                 (= rho 0.0) long-0
                 (= lat-0 (/ m/PI 2)) (+ long-0 (m/atan2 x (* -1 y)))
                 (= lat-0 (/ m/PI -2)) (+ long-0 (m/atan2 x y))
-                :default (+ long-0 (m/atan (* x (m/sin (/ c
-                                                          (- (* rho (m/cos lat-0) (m/cos c))
-                                                             (* y (m/sin lat-0) (m/sin c)))))))))]
+                :else (+ long-0
+                         (m/atan
+                          (* x (m/sin (/ c
+                                         (- (* rho (m/cos lat-0) (m/cos c))
+                                            (* y (m/sin lat-0) (m/sin c)))))))))]
      [long lat])))
 
 (defn stereographic-projector
@@ -225,9 +230,11 @@
                 (= rho 0.0) long-0
                 (= lat-0 m/HALF-PI) (+ long-0 (m/atan2 x (* -1 y)))
                 (= lat-0 (/ m/PI -2)) (+ long-0 (m/atan2 x y))
-                :default (+ long-0 (m/atan (* x (m/sin (/ c
-                                                          (- (* rho (m/cos lat-0) (m/cos c))
-                                                             (* y (m/sin lat-0) (m/sin c)))))))))]
+                :else (+ long-0
+                         (m/atan
+                          (* x (m/sin (/ c
+                                         (- (* rho (m/cos lat-0) (m/cos c))
+                                            (* y (m/sin lat-0) (m/sin c)))))))))]
      [long lat])))
 
 (defn orthographic-projector

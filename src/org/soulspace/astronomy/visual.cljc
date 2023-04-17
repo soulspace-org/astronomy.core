@@ -16,13 +16,16 @@
 ;;;
 ;;; optics
 ;;;
+
 (defn magnification
-  "Calculates the magnification from the focal length of the optic and the focal length of the ocular."
+  "Calculates the magnification from the focal length of the optic
+   and the focal length of the ocular."
   [optic-focal-length ocular-focal-length]
   (/ optic-focal-length ocular-focal-length))
 
 (defn objective-area
-  "Calculates the effective area of the objective by taking into account the area of the obstruction."
+  "Calculates the effective area of the objective by taking into account
+   the area of the obstruction."
   [aperture obstruction]
   (- (* m/PI (/ aperture 2)) (* m/PI (/ obstruction 2))))
 
@@ -33,7 +36,8 @@
      aperture))
 
 (defn f-factor
-  "Calculates the aperture ratio as a factor of the focal lenght of a given telescope."
+  "Calculates the aperture ratio as a factor of the focal lenght
+   of a given telescope."
   [aperture focal-length]
   (/ aperture focal-length))
 
@@ -58,7 +62,8 @@
 (defn twilight-number
   "Calculates the subjective contrast (Daemmerungszahl)."
   [aperture obstruction optic-focal-length ocular-focal-length]
-  (m/sqrt (* (objective-area aperture obstruction) (magnification optic-focal-length ocular-focal-length))))
+  (m/sqrt (* (objective-area aperture obstruction)
+             (magnification optic-focal-length ocular-focal-length))))
 
 (defn twilight-number-by-magnification
   "Calculates the subjective contrast (Daemmerungszahl) by the given magnification."
