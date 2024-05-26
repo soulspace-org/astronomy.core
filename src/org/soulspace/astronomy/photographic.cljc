@@ -12,7 +12,8 @@
 
 (ns org.soulspace.astronomy.photographic
   "Photographic functions."
-  (:require [org.soulspace.math.core :as m]))
+  (:require [clojure.math :as m]
+            [org.soulspace.math.core :as mc]))
 
 ;;;
 ;;; photographic functions
@@ -30,10 +31,10 @@
 (defn exposure-value
  "Calculates the exposure value for the given f-stop and shutter speed."
  ([f-stop shutter-speed]
-  (m/log2 (/ (* f-stop f-stop)
+  (mc/log2 (/ (* f-stop f-stop)
              shutter-speed)))
  ([f-stop shutter-speed iso]
-  (m/log2 (/ (* 100 f-stop f-stop)
+  (mc/log2 (/ (* 100 f-stop f-stop)
              (* iso shutter-speed)))))
 
 (defn f-stop

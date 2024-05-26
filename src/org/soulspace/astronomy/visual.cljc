@@ -11,7 +11,8 @@
 ;;;;
 
 (ns org.soulspace.astronomy.visual
-  (:require [org.soulspace.math.core :as m]))
+  (:require [clojure.math :as m]
+            [org.soulspace.math.core :as mc]))
 
 ;;;
 ;;; optics
@@ -50,7 +51,7 @@
 (defn geometric-luminous-intensity
   "Estimates the geometric luminous intensity of a spacial object."
   [optic-focal-length aperture obstruction ocular-focal-length]
-  (m/sqr (/ (objective-area aperture obstruction)
+  (mc/sqr (/ (objective-area aperture obstruction)
             (magnification optic-focal-length ocular-focal-length))))
 
 (defn contrast

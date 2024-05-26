@@ -11,8 +11,9 @@
 ;;;;
 
 (ns org.soulspace.astronomy.planet
-  (:require [org.soulspace.math.core :as m]
-            [org.soulspace.astronomy.angle :as angle]))
+  (:require [clojure.math :as m]
+            [org.soulspace.astronomy.angle :as angle]
+            [org.soulspace.math.core :as mc]))
 
 ; TODO the protocol is about topological/topographical calculations not only relevant for planets, rename to topology!?
 ; TODO move protocol and record to domain layer, use functions from topology namespace
@@ -59,7 +60,7 @@
   Planet
   (planetocentric-latitude
     [planet planetographic-latitude]
-    (m/atan (* (/ (m/sqr (:equatorial-radius planet)) (m/sqr (:polar-radius planet)))
+    (m/atan (* (/ (mc/sqr (:equatorial-radius planet)) (mc/sqr (:polar-radius planet)))
            (m/tan planetographic-latitude))))
 
   (parallel-radius
@@ -67,8 +68,8 @@
     (/ (* (:equatorial-radius planet)
           (m/cos planetographic-latitude))
        (m/sqrt (- 1
-                (* (m/sqr (:eccentricity planet))
-                   (m/sqr (m/sin planetographic-latitude)))))))
+                (* (mc/sqr (:eccentricity planet))
+                   (mc/sqr (m/sin planetographic-latitude)))))))
 
   (longitude-distance-per-degree
     [planet planetographic-latitude]
@@ -78,10 +79,10 @@
   (curvature-radius
     [planet planetographic-latitude]
     (/ (* (:equatorial-radius planet)
-          (- 1 (m/sqr (:eccentricity planet))))
+          (- 1 (mc/sqr (:eccentricity planet))))
        (m/pow (- 1
-               (* (m/sqr (:eccentricity planet))
-                  (m/sqr (m/sin planetographic-latitude))))
+               (* (mc/sqr (:eccentricity planet))
+                  (mc/sqr (m/sin planetographic-latitude))))
             3/2)))
 
   (latitude-distance-per-degree
@@ -130,10 +131,10 @@
                2)
           L (/ (+ long1 long2)
                2)
-          S (+ (* (m/sqr (m/sin G)) (m/sqr (m/cos L)))
-               (* (m/sqr (m/cos F)) (m/sqr (m/sin L))))
-          C (+ (* (m/sqr (m/cos G)) (m/sqr (m/cos L)))
-               (* (m/sqr (m/sin F)) (m/sqr (m/sin L))))
+          S (+ (* (mc/sqr (m/sin G)) (mc/sqr (m/cos L)))
+               (* (mc/sqr (m/cos F)) (mc/sqr (m/sin L))))
+          C (+ (* (mc/sqr (m/cos G)) (mc/sqr (m/cos L)))
+               (* (mc/sqr (m/sin F)) (mc/sqr (m/sin L))))
           w (m/atan (m/sqrt (/ S
                            C)))
           R (/ (m/sqrt (* S C))
@@ -145,6 +146,6 @@
                 (* 2 S))
           s (* D
                (+ 1
-                  (* (:flattening planet) H1 (m/sqr (m/sin F)) (m/sqr (m/cos G)))
-                  (* -1 (:flattening planet) H2 (m/sqr (m/cos F)) (m/sqr (m/sin G)))))]
+                  (* (:flattening planet) H1 (mc/sqr (m/sin F)) (mc/sqr (m/cos G)))
+                  (* -1 (:flattening planet) H2 (mc/sqr (m/cos F)) (mc/sqr (m/sin G)))))]
       s)))

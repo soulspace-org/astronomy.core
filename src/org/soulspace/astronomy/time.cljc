@@ -12,7 +12,7 @@
 
 (ns org.soulspace.astronomy.time
   "Functions to handle time."
-  (:require [org.soulspace.math.core :as m]))
+  (:require [clojure.math :as m]))
 
 ;;;;
 ;;;; References:

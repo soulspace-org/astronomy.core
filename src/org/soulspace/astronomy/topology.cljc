@@ -11,7 +11,8 @@
 ;;;;
 
 (ns org.soulspace.astronomy.topology
-  (:require [org.soulspace.math.core :as m]))
+  (:require [clojure.math :as m]
+            [org.soulspace.math.core :as mc]))
 
 ;;;
 ;;; Functions for topological calculations.
@@ -32,12 +33,12 @@
 (defn eccentricity
   "Calculates the eccentricity of the meridian from the given flattening."
   ^double [^double flattening]
-  (m/sqrt (- (* 2 flattening) (m/sqr flattening))))
+  (m/sqrt (- (* 2 flattening) (mc/sqr flattening))))
 
 (defn topocentric-latitude
   "Calculates the topocentric latitude for the given topographic latitude."
   ^double [^double topographic-latitude ^double equatorial-radius ^double polar-radius]
-  (m/atan (* (/ (m/sqr equatorial-radius ) (m/sqr polar-radius))
+  (m/atan (* (/ (mc/sqr equatorial-radius ) (mc/sqr polar-radius))
            (m/tan topographic-latitude))))
 
 (defn topocentric-parameters-by-height
@@ -59,7 +60,7 @@
   "Calculates the radius of the parallel circle at the given topographic latitude."
   ^double [^double topographic-latitude ^double equatorial-radius ^double eccentricity]
   (/ (* equatorial-radius (m/cos topographic-latitude))
-     (m/sqrt (- 1 (* (m/sqr eccentricity) (m/sqr (m/sin topographic-latitude)))))))
+     (m/sqrt (- 1 (* (mc/sqr eccentricity) (mc/sqr (m/sin topographic-latitude)))))))
 
 (defn longitude-distance-per-degree
   "Calculates the distance per degree of longitude for the given topographic latitude."
@@ -69,8 +70,8 @@
 (defn curvature-radius
   "Calculates the curvature radius for the given topographic latitude."
   [^double topographic-latitude ^double equatorial-radius ^double eccentricity]
-  (/ (* equatorial-radius (- 1 (m/sqr eccentricity)))
-     (m/pow (- 1 (* (m/sqr eccentricity) (m/sqr (m/sin topographic-latitude)))) 3/2)))
+  (/ (* equatorial-radius (- 1 (mc/sqr eccentricity)))
+     (m/pow (- 1 (* (mc/sqr eccentricity) (mc/sqr (m/sin topographic-latitude)))) 3/2)))
 
 (defn latitude-distance-per-degree
   "Calculates the distance per degree of latitude for the given topographic latitude."
@@ -93,14 +94,14 @@
    (let [F (/ (+ lat1 lat2) 2)
          G (/ (- lat1 lat2) 2)
          L (/ (+ long1 long2) 2.0)
-         S (+ (* (m/sqr (m/sin G)) (m/sqr (m/cos L))) (* (m/sqr (m/cos F)) (m/sqr (m/sin L))))
-         C (+ (* (m/sqr (m/cos G)) (m/sqr (m/cos L))) (* (m/sqr (m/sin F)) (m/sqr (m/sin L))))
+         S (+ (* (mc/sqr (m/sin G)) (mc/sqr (m/cos L))) (* (mc/sqr (m/cos F)) (mc/sqr (m/sin L))))
+         C (+ (* (mc/sqr (m/cos G)) (mc/sqr (m/cos L))) (* (mc/sqr (m/sin F)) (mc/sqr (m/sin L))))
          w (m/atan (m/sqrt (/ S C)))
          R (/ (m/sqrt (* S C)) w)
          D (* 2 w equatorial-radius)
          H1 (/ (- (* 3 R) 1) (* 2 C))
          H2 (/ (+ (* 3 R) 1) (* 2 S))
-         s (* D (+ 1 (* flattening H1 (m/sqr (m/sin F)) (m/sqr (m/cos G))) (* -1 flattening H2 (m/sqr (m/cos F)) (m/sqr (m/sin G)))))]
+         s (* D (+ 1 (* flattening H1 (mc/sqr (m/sin F)) (mc/sqr (m/cos G))) (* -1 flattening H2 (mc/sqr (m/cos F)) (mc/sqr (m/sin G)))))]
      s)))
 
 (defprotocol ITopologicalCoordinate

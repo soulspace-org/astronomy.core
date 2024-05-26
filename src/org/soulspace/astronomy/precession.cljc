@@ -11,7 +11,8 @@
 ;;;;
 
 (ns org.soulspace.astronomy.precession
-  (:require [org.soulspace.math.core :as m]))
+  (:require [clojure.math :as m]
+            [org.soulspace.math.core :as mc]))
 
 ;;;
 ;;; Functions for calculating the precession
@@ -50,31 +51,31 @@
   "Calculates for the given time 'T'
    in julian centuries from J2000.0"
   [T t]
-  (+ (* (+ 2306.2181 (* 1.39656 T) (* -0.000139 (m/sqr T))) t)
-     (* (+ 0.30188 (* -0.000344 T)) (m/sqr t))
-     (* 0.017998 (m/cube t))))
+  (+ (* (+ 2306.2181 (* 1.39656 T) (* -0.000139 (mc/sqr T))) t)
+     (* (+ 0.30188 (* -0.000344 T)) (mc/sqr t))
+     (* 0.017998 (mc/cube t))))
 
 (defn- calc-z
   ""
   [T t]
-  (+ (* (+ 2306.2181 (* 1.39656 T) (* -0.000139 (m/sqr T))) t)
-     (* (+ 1.09468 (* 0.000066 T)) (m/sqr t))
-     (* 0.018203 (m/cube t))))
+  (+ (* (+ 2306.2181 (* 1.39656 T) (* -0.000139 (mc/sqr T))) t)
+     (* (+ 1.09468 (* 0.000066 T)) (mc/sqr t))
+     (* 0.018203 (mc/cube t))))
 
 (defn- calc-theta
   ""
   [T t]
-  (- (* (+ 2004.3109 (* 0.85330 T) (* -0.000217 (m/sqr T))) t)
-     (* (+ 0.42665 (* 0.000217 T)) (m/sqr t))
-     (* 0.041833 (m/cube t))))
+  (- (* (+ 2004.3109 (* 0.85330 T) (* -0.000217 (mc/sqr T))) t)
+     (* (+ 0.42665 (* 0.000217 T)) (mc/sqr t))
+     (* 0.041833 (mc/cube t))))
 
 (defn precession
   "Calculates the precession for the given time 'T'
    in julian centuries from J2000.0 with high accuracy."
   ([t [ra dec]]
-   (let [zeta  (+ (* 2306.2181 t) (* 0.30188 (m/sqr t)) (* 0.017998 (m/cube t)))
-         z     (+ (* 2306.2181 t) (* 1.09468 (m/sqr t)) (* 0.018203 (m/cube t)))
-         theta (- (* 2004.3109 t) (* 0.42665) (m/sqr t) (* 0.041833 (m/cube t)))]))
+   (let [zeta  (+ (* 2306.2181 t) (* 0.30188 (mc/sqr t)) (* 0.017998 (mc/cube t)))
+         z     (+ (* 2306.2181 t) (* 1.09468 (mc/sqr t)) (* 0.018203 (mc/cube t)))
+         theta (- (* 2004.3109 t) (* 0.42665) (mc/sqr t) (* 0.041833 (mc/cube t)))]))
   ([T t [ra dec]]
    (let [zeta  (calc-zeta T t)
          z     (calc-z T t)
@@ -86,7 +87,7 @@
          a (+ (m/atan2 A B) z)
          d (if (< 1.4 (abs dec))
                  ; near the pole
-                 (m/acos (m/sqrt (+ (m/sqr A) (m/sqr B))))
+                 (m/acos (m/sqrt (+ (mc/sqr A) (mc/sqr B))))
                  ; else
                  (m/asin C))]
      [a d])))
