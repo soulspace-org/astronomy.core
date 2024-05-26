@@ -11,9 +11,10 @@
 ;;;;
 
 (ns org.soulspace.astronomy.nutation
-  (:require [org.soulspace.math.core :as m]
+  (:require [clojure.math :as m]
             [org.soulspace.astronomy.time :as time]
-            [org.soulspace.astronomy.angle :as angle]))
+            [org.soulspace.astronomy.angle :as angle]
+            [org.soulspace.math.core :as mc]))
 
 ;;;;
 ;;;; Functions for the calculation nutation and the obliquity of the ecliptic.
@@ -26,7 +27,7 @@
   "Calculates the mean elongation of the moon from the sun in degrees
   at the given instant 'T' in julian centuries from J2000.0."
   [T]
-  (+ 297.85036M (* 445267.111480M T) (* -1 0.0019142 (m/sqr T)) (/ (m/cube T)
+  (+ 297.85036M (* 445267.111480M T) (* -1 0.0019142 (mc/sqr T)) (/ (mc/cube T)
                                                                    189474)))
 
 (defn mean-longitude-sun
@@ -45,21 +46,21 @@
   "Calculates the mean anomaly of the sun in degrees at the given
   instant 'T' in julian centuries from J2000.0."
   [T]
-  (+ 357.52772M (* 35999.050340M T) (* -1 0.0001603M (m/sqr T)) (/ (* -1 (m/cube T))
+  (+ 357.52772M (* 35999.050340M T) (* -1 0.0001603M (mc/sqr T)) (/ (* -1 (mc/cube T))
                                                                    300000.0M)))
 
 (defn mean-anomaly-moon
   "Calculates the mean anomaly of the moon in degrees at the given
   instant 'T' in julian centuries from J2000.0."
   [T]
-  (+ 134.96298M (* 477198.867398M T) (* 0.0086972M (m/sqr T)) (/ (* (m/cube T))
+  (+ 134.96298M (* 477198.867398M T) (* 0.0086972M (mc/sqr T)) (/ (* (mc/cube T))
                                                                  56250M)))
 
 (defn argument-of-latitude-moon
   "Calculates the argument of latitude for the moon in degrees at the
   given instant 'T' in julian centuries from J2000.0."
   [T]
-  (+ 93.27191M (* 483202.017538M T) (* -1 0.0036825M (m/sqr T)) (/ (* (m/cube T))
+  (+ 93.27191M (* 483202.017538M T) (* -1 0.0036825M (mc/sqr T)) (/ (* (mc/cube T))
                                                                    327270M)))
 
 (defn longitude-ascending-node-moon
@@ -67,7 +68,7 @@
   ecliptic in degrees, at the given instant 'T' in julian centuries from J2000.0, 
   measured from the mean equinox of the date."
   [T]
-  (+ 125.04452M (* -1934.136261M T) (* 0.0020708M (m/sqr T)) (/ (* (m/cube T))
+  (+ 125.04452M (* -1934.136261M T) (* 0.0020708M (mc/sqr T)) (/ (* (mc/cube T))
                                                                 450000M)))
 
 (defn nutation-in-longitude
@@ -106,8 +107,8 @@
   ; TODO convert to deg and use the deg values here
   (+ obliquity_J2000
      (* -1 (angle/dms-to-deg "0°0'46.8150\"") T)
-     (* -1 (angle/dms-to-deg "0°0'0.00059\"") (m/sqr T))
-     (* (angle/dms-to-deg "0°0'0.001813\"") (m/cube T))))
+     (* -1 (angle/dms-to-deg "0°0'0.00059\"") (mc/sqr T))
+     (* (angle/dms-to-deg "0°0'0.001813\"") (mc/cube T))))
 
 (defn mean-obliquity-high-accuracy
   "Calculates the mean obliquity of the ecliptic (the inclination of the

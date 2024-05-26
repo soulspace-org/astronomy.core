@@ -13,7 +13,8 @@
 (ns org.soulspace.astronomy.angle
   "Angle functions and abstractions."
   (:require [clojure.spec.alpha :as s]
-            [org.soulspace.math.core :as m]))
+            [clojure.math :as m]
+            [org.soulspace.math.core :as mc]))
 
 ; pattern for parsing an angle string given in signed degrees, minutes and seconds, e.g. -80° 7' 30\"
 (def dms-pattern #"(\+|-)?(\d+)°\s*(?:(\d+)'\s*(?:(\d+(?:\.\d+)?)\")?)?")
@@ -88,14 +89,14 @@
   (-> hms
       hms-to-ha
       ha-to-deg
-      m/deg-to-rad))
+      mc/deg-to-rad))
 
 (defn rad-to-hms
   "Converts an angle given in radians into an hour angle
    given in hours, minutes and seconds."
   [a]
   (-> a
-      m/rad-to-deg
+      mc/rad-to-deg
       deg-to-ha
       ha-to-hms))
 
@@ -137,13 +138,13 @@
   "Converts an angle given in degrees, minutes and seconds
    into an angle given in radians."
   [dms]
-  (m/deg-to-rad (dms-to-deg dms)))
+  (mc/deg-to-rad (dms-to-deg dms)))
 
 (defn rad-to-dms
   "Converts an angle given in radians to an angle
    given in degrees, minutes and seconds."
   [a]
-  (deg-to-dms (m/rad-to-deg a)))
+  (deg-to-dms (mc/rad-to-deg a)))
 
 (defn dms-string
   "Returns the string representation of the hour angle."
@@ -208,28 +209,28 @@
   angle)
 
 (defmethod convert-angle [::rad ::deg] [angle _]
-  (->Angle (m/rad-to-deg (:value angle)) ::deg))
+  (->Angle (mc/rad-to-deg (:value angle)) ::deg))
 
 (defmethod convert-angle [::deg ::rad] [angle _]
-  (->Angle (m/deg-to-rad (:value angle)) ::rad))
+  (->Angle (mc/deg-to-rad (:value angle)) ::rad))
 
 (defmethod convert-angle [::rad ::arcmin] [angle _]
-  (->Angle (* (m/rad-to-deg (:value angle)) 60) ::arcmin))
+  (->Angle (* (mc/rad-to-deg (:value angle)) 60) ::arcmin))
 
 (defmethod convert-angle [::arcmin ::rad] [angle _]
-  (->Angle (m/deg-to-rad (/ (:value angle) 60)) ::rad))
+  (->Angle (mc/deg-to-rad (/ (:value angle) 60)) ::rad))
 
 (defmethod convert-angle [::rad ::arcsec] [angle _]
-  (->Angle (* (m/rad-to-deg (:value angle)) 3600) ::arcsec))
+  (->Angle (* (mc/rad-to-deg (:value angle)) 3600) ::arcsec))
 
 (defmethod convert-angle [::arcsec ::rad] [angle _]
-  (->Angle (m/deg-to-rad (/ (:value angle) 3600)) ::rad))
+  (->Angle (mc/deg-to-rad (/ (:value angle) 3600)) ::rad))
 
 (defmethod convert-angle [::rad ::hour-angle] [angle _]
-  (->Angle (/ (m/rad-to-deg (:value angle)) 15) ::hour-angle))
+  (->Angle (/ (mc/rad-to-deg (:value angle)) 15) ::hour-angle))
 
 (defmethod convert-angle [::hour-angle ::rad] [angle _]
-  (->Angle (m/deg-to-rad (* (:value angle) 15)) ::rad))
+  (->Angle (mc/deg-to-rad (* (:value angle) 15)) ::rad))
 
 (defmethod convert-angle [::deg ::arcmin] [angle _]
   (->Angle (* (:value angle) 60) ::arcmin))
@@ -266,4 +267,3 @@
 
 (defmethod convert-angle [::hour-angle ::arcsec] [angle _]
   (->Angle (* (:value angle) 15 3600) ::arcsec))
-

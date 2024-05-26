@@ -12,7 +12,7 @@
 
 (ns org.soulspace.astronomy.atmosphere
   "Functions for calculations related to the atmosphere of the earth."
-  (:require [org.soulspace.math.core :as m]))
+  (:require [clojure.math :as m]))
 
 ;;;;
 ;;;; References:
@@ -54,7 +54,7 @@
   ([zenital-distance wave-length]
    (* 1.086 (rayleigh-optical-depth zenital-distance wave-length))))
 
-; TODO find formula and implement extiction by mie scattering
+; TODO find formula and implement extinction by mie scattering
 (defn mie-extinction
   "Calculates the extinction by mie scattering in magnitudes."
   ([wave-length])
@@ -77,6 +77,7 @@
 (defn temperature-pressure-correction
  "Calculates the correction for temperature and air pressure"
  [temperature pressure]
+ ; FIXME error in formular 
  (/ pressure 101) (/ 283 (+ 273 temperature)))
 
 (defn refraction-by-apparent-altitude

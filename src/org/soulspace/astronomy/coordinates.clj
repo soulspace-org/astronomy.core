@@ -12,7 +12,8 @@
 
 (ns org.soulspace.astronomy.coordinates
   "Coordinates functions and abstractions."
-  (:require [org.soulspace.math.core :as m]
+  (:require [clojure.math :as m]
+            [org.soulspace.math.core :as mc]
             [org.soulspace.astronomy.time :as time]
             [org.soulspace.astronomy.angle :as a]
             [org.soulspace.astronomy.nutation :as n]))
@@ -30,22 +31,22 @@
   (^double [^double ra1 ^double dec1 ^double ra2 ^double dec2]
    (let [delta-ra (- ra1 ra2)
          delta-dec (- dec1 dec2)]
-     (if (or (< (abs (- (abs dec1) m/HALF-PI)) pi-ninetieth)
-             (< (abs (- (abs dec2) m/HALF-PI)) pi-ninetieth))
-       (m/ahav (+ (m/hav delta-dec)
-                  (* (m/cos dec1) (m/cos dec2) (m/hav delta-ra)))) ; use haversine if declinations are near the poles
+     (if (or (< (abs (- (abs dec1) mc/HALF-PI)) pi-ninetieth)
+             (< (abs (- (abs dec2) mc/HALF-PI)) pi-ninetieth))
+       (mc/ahav (+ (mc/hav delta-dec)
+                  (* (m/cos dec1) (m/cos dec2) (mc/hav delta-ra)))) ; use haversine if declinations are near the poles
        (m/acos (+ (* (m/sin dec1) (m/sin dec2))
                   (* (m/cos dec1) (m/cos dec2) (m/cos delta-ra))))))))
 
 (defn zenit-distance-by-altitude
   "Calculates the zenit distance by altitude (given in rad)."
   ^double [^double altitude]
-  (- m/HALF-PI (min (abs altitude) m/HALF-PI)))
+  (- mc/HALF-PI (min (abs altitude) mc/HALF-PI)))
 
 (defn altitude-by-zenit-distance
   "Calculates the altitude by zenit distance (given in rad)."
   ^double [^double zenit-distance]
-  (- m/HALF-PI (min (abs zenit-distance))))
+  (- mc/HALF-PI (min (abs zenit-distance))))
 
 (defn hour-angle
   "Calculates the hour angle of the right ascension at the given instant."
@@ -64,9 +65,9 @@
   [z rho]
   (if (== rho 0)
     (cond
-      (< z 0) (m/deg-to-rad -90)
+      (< z 0) (mc/deg-to-rad -90)
       (== z 0) 0
-      (> z 0) (m/deg-to-rad 90))
+      (> z 0) (mc/deg-to-rad 90))
     (m/atan (/ z rho))))
 
 (defn- calc-lambda
@@ -74,8 +75,8 @@
   (cond
     (and (== x 0) (== y 0)) 0.0
     (and (>= x 0) (>= y 0)) phi
-    (and (>= x 0) (< y 0)) (+ (m/deg-to-rad 360) phi)
-    (< x 0) (- (m/deg-to-rad 180) phi)))
+    (and (>= x 0) (< y 0)) (+ (mc/deg-to-rad 360) phi)
+    (< x 0) (- (mc/deg-to-rad 180) phi)))
 
 (defn cartesian-to-spherical
   "Converts cartesian to spherical coordinates."
@@ -83,8 +84,8 @@
    (let [[x y z] cartesian-coords]
      (cartesian-to-spherical x y z)))
   ([x y z]
-   (let [r (m/sqrt (+ (m/sqr x) (m/sqr y) (m/sqr z)))
-         rho (m/sqrt (+ (m/sqr x) (m/sqr y)))
+   (let [r (m/sqrt (+ (mc/sqr x) (mc/sqr y) (mc/sqr z)))
+         rho (m/sqrt (+ (mc/sqr x) (mc/sqr y)))
          beta (calc-beta z rho)
          phi (* 2 (m/atan (/ y (+ (abs x) rho))))
          lambda (calc-lambda x y phi)]
@@ -228,7 +229,7 @@
                              rho))))
          long (cond
                 (= rho 0.0) long-0
-                (= lat-0 m/HALF-PI) (+ long-0 (m/atan2 x (* -1 y)))
+                (= lat-0 mc/HALF-PI) (+ long-0 (m/atan2 x (* -1 y)))
                 (= lat-0 (/ m/PI -2)) (+ long-0 (m/atan2 x y))
                 :else (+ long-0
                          (m/atan
@@ -292,27 +293,27 @@
   "Calculates the eccentricity of the orbit of the earth
    for the given time 'T' in julian centuries from J2000.0."
   [T]
-  (- 0.016708634 (* 0.000042037 T) (* 0.0000001267 (m/sqr T))))
+  (- 0.016708634 (* 0.000042037 T) (* 0.0000001267 (mc/sqr T))))
 
 (defn mean-longitude-sun
   "Calculates the mean longitude of the sun in degrees
    for the given time 'T' in julian centuries from J2000.0."
   [T]
-  (+ 280.46646 (* 36000.76983 T) (* 0.0003032 (m/sqr T))))
+  (+ 280.46646 (* 36000.76983 T) (* 0.0003032 (mc/sqr T))))
 
 (defn mean-anomaly-sun
   "Calculates the mean anomaly of the sun in degrees 
    for the given time 'T' in julian centuries from J2000.0."
   [T]
-  (+ 357.52911 (* 35999.05029 T)  (* -0.0001537 (m/sqr T))))
+  (+ 357.52911 (* 35999.05029 T)  (* -0.0001537 (mc/sqr T))))
 
 (defn center-of-sun
   "Calculates the equation of the center of the sun in degrees 
    for the given mean anomaly of the sun 'M' and
    the given time 'T' in julian centuries from J2000.0."
   [M T]
-  (let [m (m/deg-to-rad M)]
-    (+ (* (- 1.914602 (* 0.004817 T) (* 0.000014 (m/sqr T))) (m/sin m))
+  (let [m (mc/deg-to-rad M)]
+    (+ (* (- 1.914602 (* 0.004817 T) (* 0.000014 (mc/sqr T))) (m/sin m))
        (* (- 0.019993 (* 0.000101 T)) (m/sin (* 2 m)))
        (* 0.000289 (m/sin (* 3 m))))))
 
@@ -341,14 +342,14 @@
   ([T]
    (distance-sun-earth (eccentricity-earth-orbit T) (true-anomaly-of-sun T) T))
   ([e v T]
-   (/ (* 1.000001018 (- 1 (m/sqr e)))
+   (/ (* 1.000001018 (- 1 (mc/sqr e)))
       (+ 1 (* e (m/cos v))))))
 
 (defn longitude-earth-perihelion
   "Calculates the longitude of the perihelion of the orbit of the earth
   in degrees for the given time 'T' in julian centuries from J2000.0."
   [T]
-  (+ 102.93735 (* 1.71946 T) (* 0.00046 (m/sqr T))))
+  (+ 102.93735 (* 1.71946 T) (* 0.00046 (mc/sqr T))))
 
 (def ^:const kappa "Constant of abberation [°]]." (a/dms-to-rad "0°0'20.49552\""))
 
@@ -358,8 +359,8 @@
    given as a vector 'v' in the form of ['lat' 'long'] in rad."
   ([T [lat long]]
    (let [e (eccentricity-earth-orbit T)
-         l-sun (m/deg-to-rad (true-longitude-of-sun T))
-         pi (m/deg-to-rad (longitude-earth-perihelion T))
+         l-sun (mc/deg-to-rad (true-longitude-of-sun T))
+         pi (mc/deg-to-rad (longitude-earth-perihelion T))
          d-long (/ (+ (* -1 kappa (m/cos (- l-sun long)))
                       (* e kappa (m/cos (- pi long))))
                    (m/cos lat))
@@ -374,8 +375,8 @@
    given as a vector 'v' in the form of ['ra' 'dec'] in rad."
   ([T [ra dec]]
    (let [e (eccentricity-earth-orbit T)
-         l-sun (m/deg-to-rad (true-longitude-of-sun T))
-         pi (m/deg-to-rad (longitude-earth-perihelion T))
+         l-sun (mc/deg-to-rad (true-longitude-of-sun T))
+         pi (mc/deg-to-rad (longitude-earth-perihelion T))
          epsilon (n/true-obliquity T)
          d-ra (+ (* -1 kappa (/ (+ (* (m/cos ra) (m/cos l-sun) (m/cos epsilon))
                                    (* (m/sin ra) (m/sin l-sun)))

@@ -11,7 +11,8 @@
 ;;;;
 
 (ns org.soulspace.astronomy.earth
-  (:require [org.soulspace.math.core :as m]))
+  (:require [clojure.math :as m]
+            [org.soulspace.math.core :as mc]))
 
 ;; References:
 ;; Jean Meeus; Astronomical Algorithms, 2. Ed.; Willmann-Bell
@@ -22,7 +23,7 @@
 (def equatorial-radius 6378140) ; equatorial radius in meters
 (def flattening (/ 1 298.257)) ; flattening
 (def polar-radius (* equatorial-radius (- 1 flattening))) ; polar radius in meters
-(def eccentricity (m/sqrt (- (* 2 flattening) (m/sqr flattening)))) ; eccentricity of the meridian
+(def eccentricity (m/sqrt (- (* 2 flattening) (mc/sqr flattening)))) ; eccentricity of the meridian
 (def omega 7.292114992e-5) ; rotational angular velocity with respect to the stars at epoch 1996.5 (but earth is slowing down)
 
 (defprotocol Position
@@ -40,7 +41,9 @@
   (latitude [position] (:latitude position))
   (height [position] (:height position))
   GeographicPosition
-  (geocentric-position [position]))
+  (geocentric-position [position]
+    ; TODO
+    ))
 
 
 (defprotocol GeocentricPosition)
@@ -53,7 +56,7 @@
 (defn geocentric-latitude
   "Calculates the geocentric latitude for the given geographic latitude."
   [geographic-latitude]
-  (m/atan (* (/ (m/sqr equatorial-radius) (m/sqr polar-radius))
+  (m/atan (* (/ (mc/sqr equatorial-radius) (mc/sqr polar-radius))
            (m/tan geographic-latitude))))
 
 (defn geocentric-parameters-by-height
@@ -73,10 +76,11 @@
   ([geographic-latitude height]
    (:rho (geocentric-parameters-by-height geographic-latitude height))))
 
-(defn parallel-radius [geographic-latitude]
+(defn parallel-radius
   "Calculates the radius of the parallel circle at the given geographic latitude."
+  [geographic-latitude]
   (/ (* equatorial-radius (m/cos geographic-latitude))
-     (m/sqrt (- 1 (* (m/sqr eccentricity) (m/sqr (m/sin geographic-latitude)))))))
+     (m/sqrt (- 1 (* (mc/sqr eccentricity) (mc/sqr (m/sin geographic-latitude)))))))
 
 (defn longitude-distance-per-degree
   "Calculates the distance per degree of longitude for the given geographic latitude."
@@ -86,16 +90,17 @@
 (defn curvature-radius
   "Calculates the curvature radius for the given geographic latitude."
   [geographic-latitude]
-  (/ (* equatorial-radius (- 1 (m/sqr eccentricity)))
-     (m/pow (- 1 (* (m/sqr eccentricity) (m/sqr (m/sin geographic-latitude)))) 3/2)))
+  (/ (* equatorial-radius (- 1 (mc/sqr eccentricity)))
+     (m/pow (- 1 (* (mc/sqr eccentricity) (mc/sqr (m/sin geographic-latitude)))) 3/2)))
 
 (defn latitude-distance-per-degree
   "Calculates the distance per degree of latitude for the given geographic latitude."
   [geographic-latitude]
   (* (/ m/PI 180) (curvature-radius geographic-latitude)))
 
-(defn linear-velocity [geographic-latitude]
+(defn linear-velocity
   "Calculates The linear velocity with respect to the stars at the given latitude in meters per second."
+  [geographic-latitude]
   (* omega (parallel-radius geographic-latitude)))
 
 (defn geodesic-distance
@@ -104,14 +109,14 @@
   (let [F (/ (+ lat1 lat2) 2)
         G (/ (- lat1 lat2) 2)
         L (/ (+ long1 long2) 2)
-        S (+ (* (m/sqr (m/sin G)) (m/sqr (m/cos L))) (* (m/sqr (m/cos F)) (m/sqr (m/sin L))))
-        C (+ (* (m/sqr (m/cos G)) (m/sqr (m/cos L))) (* (m/sqr (m/sin F)) (m/sqr (m/sin L))))
+        S (+ (* (mc/sqr (m/sin G)) (mc/sqr (m/cos L))) (* (mc/sqr (m/cos F)) (mc/sqr (m/sin L))))
+        C (+ (* (mc/sqr (m/cos G)) (mc/sqr (m/cos L))) (* (mc/sqr (m/sin F)) (mc/sqr (m/sin L))))
         w (m/atan (m/sqrt (/ S C)))
         R (/ (m/sqrt (* S C)) w)
         D (* 2 w equatorial-radius)
         H1 (/ (- (* 3 R) 1) (* 2 C))
         H2 (/ (+ (* 3 R) 1) (* 2 S))
-        s (* D (+ 1 (* flattening H1 (m/sqr (m/sin F)) (m/sqr (m/cos G)))
-                  (* -1 flattening H2 (m/sqr (m/cos F)) (m/sqr (m/sin G)))))]
+        s (* D (+ 1 (* flattening H1 (mc/sqr (m/sin F)) (mc/sqr (m/cos G)))
+                  (* -1 flattening H2 (mc/sqr (m/cos F)) (mc/sqr (m/sin G)))))]
     s))
 

@@ -11,7 +11,7 @@
 ;;;;
 
 (ns org.soulspace.astronomy.magnitude
-  (:require [org.soulspace.math.core :as m]))
+  (:require [clojure.math :as m]))
 
 ;;;
 ;;; Functions for astronomical magnitudes
