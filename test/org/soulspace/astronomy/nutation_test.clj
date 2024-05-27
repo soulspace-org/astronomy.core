@@ -13,7 +13,6 @@
 (ns org.soulspace.astronomy.nutation-test
   (:require [clojure.test :refer :all]
             [org.soulspace.astronomy.test-utils :as utils]
-            [org.soulspace.astronomy.angle :as angle]
             [org.soulspace.astronomy.time :as time]
             [org.soulspace.astronomy.nutation :refer :all]))
 

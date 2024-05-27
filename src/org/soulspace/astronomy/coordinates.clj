@@ -65,9 +65,9 @@
   [z rho]
   (if (== rho 0)
     (cond
-      (< z 0) (mc/deg-to-rad -90)
+      (< z 0) (m/to-radians -90)
       (== z 0) 0
-      (> z 0) (mc/deg-to-rad 90))
+      (> z 0) (m/to-radians 90))
     (m/atan (/ z rho))))
 
 (defn- calc-lambda
@@ -75,8 +75,8 @@
   (cond
     (and (== x 0) (== y 0)) 0.0
     (and (>= x 0) (>= y 0)) phi
-    (and (>= x 0) (< y 0)) (+ (mc/deg-to-rad 360) phi)
-    (< x 0) (- (mc/deg-to-rad 180) phi)))
+    (and (>= x 0) (< y 0)) (+ (m/to-radians 360) phi)
+    (< x 0) (- (m/to-radians 180) phi)))
 
 (defn cartesian-to-spherical
   "Converts cartesian to spherical coordinates."
@@ -312,7 +312,7 @@
    for the given mean anomaly of the sun 'M' and
    the given time 'T' in julian centuries from J2000.0."
   [M T]
-  (let [m (mc/deg-to-rad M)]
+  (let [m (m/to-radians M)]
     (+ (* (- 1.914602 (* 0.004817 T) (* 0.000014 (mc/sqr T))) (m/sin m))
        (* (- 0.019993 (* 0.000101 T)) (m/sin (* 2 m)))
        (* 0.000289 (m/sin (* 3 m))))))
@@ -359,8 +359,8 @@
    given as a vector 'v' in the form of ['lat' 'long'] in rad."
   ([T [lat long]]
    (let [e (eccentricity-earth-orbit T)
-         l-sun (mc/deg-to-rad (true-longitude-of-sun T))
-         pi (mc/deg-to-rad (longitude-earth-perihelion T))
+         l-sun (m/to-radians (true-longitude-of-sun T))
+         pi (m/to-radians (longitude-earth-perihelion T))
          d-long (/ (+ (* -1 kappa (m/cos (- l-sun long)))
                       (* e kappa (m/cos (- pi long))))
                    (m/cos lat))
@@ -375,8 +375,8 @@
    given as a vector 'v' in the form of ['ra' 'dec'] in rad."
   ([T [ra dec]]
    (let [e (eccentricity-earth-orbit T)
-         l-sun (mc/deg-to-rad (true-longitude-of-sun T))
-         pi (mc/deg-to-rad (longitude-earth-perihelion T))
+         l-sun (m/to-radians (true-longitude-of-sun T))
+         pi (m/to-radians (longitude-earth-perihelion T))
          epsilon (n/true-obliquity T)
          d-ra (+ (* -1 kappa (/ (+ (* (m/cos ra) (m/cos l-sun) (m/cos epsilon))
                                    (* (m/sin ra) (m/sin l-sun)))

@@ -12,10 +12,9 @@
 
 (ns org.soulspace.astronomy.coordinates-test
   (:require [clojure.test :refer :all]
-            [org.soulspace.math.core :as m]
+            [clojure.math :as m]
             [org.soulspace.astronomy.coordinates :refer :all]
             [org.soulspace.astronomy.angle :as a]
-            [org.soulspace.astronomy.time :as t]
             [org.soulspace.astronomy.test-utils :as utils]))
 
 ; Arcturus
@@ -32,43 +31,43 @@
   (is (= 1.0 (angular-distance [1 1] [1 2])))
   (is (= 1.0 (angular-distance [1 2] [1 1])))
   (is (= 1.0 (angular-distance [1 2] [1 1])))
-  (is (= (m/deg-to-rad 180)
-         (angular-distance [(m/deg-to-rad 90) (m/deg-to-rad 0)]
-                           [(m/deg-to-rad -90) (m/deg-to-rad 0)])))
-  (is (= (m/deg-to-rad 0)
-         (angular-distance [(m/deg-to-rad -180) (m/deg-to-rad 0)]
-                           [(m/deg-to-rad 180) (m/deg-to-rad 0)])))
-  (is (= (m/deg-to-rad 180)
-         (angular-distance [(m/deg-to-rad -180) (m/deg-to-rad 0)]
-                           [(m/deg-to-rad 360) (m/deg-to-rad 0)])))
-  (is (= (m/deg-to-rad 0)
-         (angular-distance [(m/deg-to-rad -180) (m/deg-to-rad 0)]
-                           [(m/deg-to-rad 540) (m/deg-to-rad 0)])))
-  (is (= (m/deg-to-rad 180)
-         (angular-distance [(m/deg-to-rad -180) (m/deg-to-rad 90)]
-                           [(m/deg-to-rad 180) (m/deg-to-rad -90)])))
-  (is (= (m/deg-to-rad 180)
-         (angular-distance [(m/deg-to-rad 0) (m/deg-to-rad 90)]
-                           [(m/deg-to-rad 0) (m/deg-to-rad -90)])))
-  (is (utils/within-error-margin (m/deg-to-rad 20)
-                         (angular-distance [(m/deg-to-rad 10) (m/deg-to-rad 0)]
-                                           [(m/deg-to-rad -10) (m/deg-to-rad 0)])))
+  (is (= (m/to-radians 180)
+         (angular-distance [(m/to-radians 90) (m/to-radians 0)]
+                           [(m/to-radians -90) (m/to-radians 0)])))
+  (is (= (m/to-radians 0)
+         (angular-distance [(m/to-radians -180) (m/to-radians 0)]
+                           [(m/to-radians 180) (m/to-radians 0)])))
+  (is (= (m/to-radians 180)
+         (angular-distance [(m/to-radians -180) (m/to-radians 0)]
+                           [(m/to-radians 360) (m/to-radians 0)])))
+  (is (= (m/to-radians 0)
+         (angular-distance [(m/to-radians -180) (m/to-radians 0)]
+                           [(m/to-radians 540) (m/to-radians 0)])))
+  (is (= (m/to-radians 180)
+         (angular-distance [(m/to-radians -180) (m/to-radians 90)]
+                           [(m/to-radians 180) (m/to-radians -90)])))
+  (is (= (m/to-radians 180)
+         (angular-distance [(m/to-radians 0) (m/to-radians 90)]
+                           [(m/to-radians 0) (m/to-radians -90)])))
+  (is (utils/within-error-margin (m/to-radians 20)
+                         (angular-distance [(m/to-radians 10) (m/to-radians 0)]
+                                           [(m/to-radians -10) (m/to-radians 0)])))
  ; Arcturus <-> Spica
   (is (utils/within-error-margin 32.7930
-                                 (m/rad-to-deg
+                                 (m/to-degrees
                                   (angular-distance Arcturus Spica)))))
 
 (deftest altitude-by-zenit-distance-tests
-  (is (= (m/deg-to-rad 90) (altitude-by-zenit-distance (m/deg-to-rad 0))))
-  (is (= (m/deg-to-rad 0)  (altitude-by-zenit-distance (m/deg-to-rad 90))))
-  (is (= (m/deg-to-rad 80) (altitude-by-zenit-distance (m/deg-to-rad 10))))
-  (is (= (m/deg-to-rad 45) (altitude-by-zenit-distance (m/deg-to-rad 45)))))
+  (is (= (m/to-radians 90) (altitude-by-zenit-distance (m/to-radians 0))))
+  (is (= (m/to-radians 0)  (altitude-by-zenit-distance (m/to-radians 90))))
+  (is (= (m/to-radians 80) (altitude-by-zenit-distance (m/to-radians 10))))
+  (is (= (m/to-radians 45) (altitude-by-zenit-distance (m/to-radians 45)))))
 
 (deftest zenit-distance-by-altitude-test
-  (is (= (m/deg-to-rad 90) (zenit-distance-by-altitude (m/deg-to-rad 0))))
-  (is (= (m/deg-to-rad 0)  (zenit-distance-by-altitude (m/deg-to-rad 90))))
-  (is (= (m/deg-to-rad 80) (zenit-distance-by-altitude (m/deg-to-rad 10))))
-  (is (= (m/deg-to-rad 45) (zenit-distance-by-altitude (m/deg-to-rad 45)))))
+  (is (= (m/to-radians 90) (zenit-distance-by-altitude (m/to-radians 0))))
+  (is (= (m/to-radians 0)  (zenit-distance-by-altitude (m/to-radians 90))))
+  (is (= (m/to-radians 80) (zenit-distance-by-altitude (m/to-radians 10))))
+  (is (= (m/to-radians 45) (zenit-distance-by-altitude (m/to-radians 45)))))
 
 (def Regulus [(a/hms-to-rad "10h08m22.3s")
               (a/dms-to-rad "11°58'02\"")])
@@ -87,11 +86,11 @@
   (let [reg (proper-motion -22 Regulus Regulus-PM)
         theta (proper-motion 28.86705 theta-Persei theta-Persei-PM)]
     (testing "Proper motion of Regulus"
-      (is (utils/within-error-margin 152.092917 (m/rad-to-deg (first reg)) 0.00001))
-      (is (utils/within-error-margin 11.967186 (m/rad-to-deg (second reg)) 0.00001)))
+      (is (utils/within-error-margin 152.092917 (m/to-degrees (first reg)) 0.00001))
+      (is (utils/within-error-margin 11.967186 (m/to-degrees (second reg)) 0.00001)))
     (testing "Proper motion of theta Persei"
-      (is (utils/within-error-margin 41.054063 (m/rad-to-deg (first theta))) 0.00001)
-      (is (utils/within-error-margin 49.227750 (m/rad-to-deg (second theta)) 0.00001)))))
+      (is (utils/within-error-margin 41.054063 (m/to-degrees (first theta))) 0.00001)
+      (is (utils/within-error-margin 49.227750 (m/to-degrees (second theta)) 0.00001)))))
 
 (comment
   (* -22 -0.0169)

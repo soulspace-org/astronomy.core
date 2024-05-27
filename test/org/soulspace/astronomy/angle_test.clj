@@ -12,7 +12,8 @@
 
 (ns org.soulspace.astronomy.angle-test
   (:require [clojure.test :refer :all]
-            [org.soulspace.math.core :as m]
+            [clojure.math :as m]
+            [org.soulspace.math.core :as mc]
             [org.soulspace.astronomy.test-utils :as utils]
             [org.soulspace.astronomy.angle :as angle]))
 

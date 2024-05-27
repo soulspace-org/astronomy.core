@@ -62,7 +62,8 @@
 (defn geocentric-parameters-by-height
   [geographic-latitude height]
   (let [u (m/atan (* (/ polar-radius equatorial-radius) (m/tan geographic-latitude)))
-        rho-sin-gc-lat (+ (* (/ polar-radius equatorial-radius) (m/sin u)) (* (/ height equatorial-radius) (m/sin geographic-latitude)))
+        rho-sin-gc-lat (+ (* (/ polar-radius equatorial-radius) (m/sin u))
+                          (* (/ height equatorial-radius) (m/sin geographic-latitude)))
         rho-cos-gc-lat (+ (m/cos u)(* (/ height equatorial-radius) (m/cos geographic-latitude)))
         rho (if (> (abs geographic-latitude) (/ m/PI 4))
               (/ rho-sin-gc-lat (m/sin (geocentric-latitude geographic-latitude)))

@@ -12,7 +12,6 @@
 
 (ns org.soulspace.astronomy.distance-test
   (:require [clojure.test :refer :all]
-        [org.soulspace.astronomy.test-utils :as utils]
         [org.soulspace.astronomy.distance :as d])
   ;(:import [org.soulspace.clj.astronomy.distance AstronomicalUnits])
   )
