@@ -12,7 +12,7 @@
 
 (ns org.soulspace.astronomy.topology-test
   (:require [clojure.test :refer :all]
-            [org.soulspace.math.core :as m]
+            [clojure.math :as m]
             [org.soulspace.astronomy.test-utils :as utils]
             [org.soulspace.astronomy.angle :as a]
             [org.soulspace.astronomy.topology :refer :all]))
@@ -42,10 +42,10 @@
 
 ; Location and height of the Palomar Observatory
 (deftest topocentric-parameters-by-height-test
-  (let [lat (m/deg-to-rad (a/dms-to-deg "33° 21' 22\""))
+  (let [lat (m/to-radians (a/dms-to-deg "33° 21' 22\""))
         equatorial-radius (:equatorial-radius earth)
         polar-radius (:polar-radius earth)
         p (topocentric-parameters-by-height lat 1706.0 equatorial-radius polar-radius)]
-    (is (utils/within-error-margin 33.267796 (m/rad-to-deg (:u p))))
+    (is (utils/within-error-margin 33.267796 (m/to-degrees (:u p))))
     (is (utils/within-error-margin  0.546861 (:rho-sin-topocentric-lat p)))
     (is (utils/within-error-margin  0.836339 (:rho-cos-topocentric-lat p) ))))
