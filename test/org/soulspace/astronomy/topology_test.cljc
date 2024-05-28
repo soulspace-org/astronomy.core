@@ -12,10 +12,11 @@
 
 (ns org.soulspace.astronomy.topology-test
   (:require [clojure.test :refer :all]
-            [clojure.math :as m]
             [org.soulspace.astronomy.test-utils :as utils]
             [org.soulspace.astronomy.angle :as a]
             [org.soulspace.astronomy.topology :refer :all]))
+#?(:clj (require '[clojure.math :as m])
+   :cljs (require '[cljs.math :as m]))
 
 (def flattening (/ 1 298.257)) ; flattening
 
