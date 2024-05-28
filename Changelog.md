@@ -3,6 +3,11 @@ Changelog
 
 Version 0.4.4
 -------------
+* use clojure.math/cljs.math where feasable
+* updated math.core to 1.0.0
+
+Version 0.4.4
+-------------
 * added coordinates functions
 * added proper motion
 * added precession with high precision
