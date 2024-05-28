@@ -12,7 +12,6 @@
 
 (ns org.soulspace.astronomy.coordinates-test
   (:require [clojure.test :refer :all]
-            [org.soulspace.math.core :as mc]
             [org.soulspace.astronomy.coordinates :refer :all]
             [org.soulspace.astronomy.angle :as a]
             [org.soulspace.astronomy.test-utils :as utils]))

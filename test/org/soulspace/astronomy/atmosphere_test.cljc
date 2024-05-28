@@ -12,6 +12,5 @@
 
 (ns org.soulspace.astronomy.atmosphere-test
   (:require [clojure.test :refer :all]
-            [org.soulspace.astronomy.test-utils :as utils]
             [org.soulspace.astronomy.atmosphere :refer :all]))
 
