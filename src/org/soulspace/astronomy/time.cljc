@@ -11,8 +11,9 @@
 ;;;;
 
 (ns org.soulspace.astronomy.time
-  "Functions to handle time."
-  (:require [clojure.math :as m]))
+  "Functions to handle time.")
+#?(:clj (require '[clojure.math :as m])
+   :cljs (require '[cljs.math :as m]))
 
 ;;;;
 ;;;; References:

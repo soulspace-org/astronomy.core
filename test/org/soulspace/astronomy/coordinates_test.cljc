@@ -12,11 +12,13 @@
 
 (ns org.soulspace.astronomy.coordinates-test
   (:require [clojure.test :refer :all]
-            [org.soulspace.math.core :as m]
+            [org.soulspace.math.core :as mc]
             [org.soulspace.astronomy.coordinates :refer :all]
             [org.soulspace.astronomy.angle :as a]
             [org.soulspace.astronomy.time :as t]
             [org.soulspace.astronomy.test-utils :as utils]))
+#?(:clj (require '[clojure.math :as m])
+   :cljs (require '[cljs.math :as m]))
 
 ; Arcturus
 (def Arcturus [(a/hms-to-rad "14h15m39.7s")

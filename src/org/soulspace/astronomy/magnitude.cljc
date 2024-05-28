@@ -10,8 +10,9 @@
 ;;;;   You must not remove this notice, or any other, from this software.
 ;;;;
 
-(ns org.soulspace.astronomy.magnitude
-  (:require [clojure.math :as m]))
+(ns org.soulspace.astronomy.magnitude)
+#?(:clj (require '[clojure.math :as m])
+   :cljs (require '[cljs.math :as m]))
 
 ;;;
 ;;; Functions for astronomical magnitudes

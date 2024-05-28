@@ -11,9 +11,10 @@
 ;;;;
 
 (ns org.soulspace.astronomy.planet
-  (:require [clojure.math :as m]
-            [org.soulspace.astronomy.angle :as angle]
+  (:require [org.soulspace.astronomy.angle :as angle]
             [org.soulspace.math.core :as mc]))
+#?(:clj (require '[clojure.math :as m])
+   :cljs (require '[cljs.math :as m]))
 
 ; TODO the protocol is about topological/topographical calculations not only relevant for planets, rename to topology!?
 ; TODO move protocol and record to domain layer, use functions from topology namespace

@@ -11,8 +11,9 @@
 ;;;;
 
 (ns org.soulspace.astronomy.earth
-  (:require [clojure.math :as m]
-            [org.soulspace.math.core :as mc]))
+  (:require [org.soulspace.math.core :as mc]))
+#?(:clj (require '[clojure.math :as m])
+   :cljs (require '[cljs.math :as m]))
 
 ;; References:
 ;; Jean Meeus; Astronomical Algorithms, 2. Ed.; Willmann-Bell

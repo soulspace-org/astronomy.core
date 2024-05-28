@@ -11,10 +11,11 @@
 ;;;;
 
 (ns org.soulspace.astronomy.nutation
-  (:require [clojure.math :as m]
-            [org.soulspace.astronomy.time :as time]
+  (:require [org.soulspace.astronomy.time :as time]
             [org.soulspace.astronomy.angle :as angle]
             [org.soulspace.math.core :as mc]))
+#?(:clj (require '[clojure.math :as m])
+   :cljs (require '[cljs.math :as m]))
 
 ;;;;
 ;;;; Functions for the calculation nutation and the obliquity of the ecliptic.

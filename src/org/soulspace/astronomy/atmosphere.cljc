@@ -11,8 +11,9 @@
 ;;;;
 
 (ns org.soulspace.astronomy.atmosphere
-  "Functions for calculations related to the atmosphere of the earth."
-  (:require [clojure.math :as m]))
+  "Functions for calculations related to the atmosphere of the earth.")
+#?(:clj (require '[clojure.math :as m])
+   :cljs (require '[cljs.math :as m]))
 
 ;;;;
 ;;;; References:

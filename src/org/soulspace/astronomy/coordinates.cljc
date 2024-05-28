@@ -12,11 +12,12 @@
 
 (ns org.soulspace.astronomy.coordinates
   "Coordinates functions and abstractions."
-  (:require [clojure.math :as m]
-            [org.soulspace.math.core :as mc]
+  (:require [org.soulspace.math.core :as mc]
             [org.soulspace.astronomy.time :as time]
             [org.soulspace.astronomy.angle :as a]
             [org.soulspace.astronomy.nutation :as n]))
+#?(:clj (require '[clojure.math :as m])
+   :cljs (require '[cljs.math :as m]))
 
 ;;;
 ;;; Coordinates functions and abstractions

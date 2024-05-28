@@ -11,8 +11,9 @@
 ;;;;
 
 (ns org.soulspace.astronomy.precession
-  (:require [clojure.math :as m]
-            [org.soulspace.math.core :as mc]))
+  (:require [org.soulspace.math.core :as mc]))
+#?(:clj (require '[clojure.math :as m])
+   :cljs (require '[cljs.math :as m]))
 
 ;;;
 ;;; Functions for calculating the precession

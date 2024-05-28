@@ -13,8 +13,9 @@
 (ns org.soulspace.astronomy.angle
   "Angle functions and abstractions."
   (:require [clojure.spec.alpha :as s]
-            [clojure.math :as m]
             [org.soulspace.math.core :as mc]))
+#?(:clj (require '[clojure.math :as m])
+   :cljs (require '[cljs.math :as m]))
 
 ; pattern for parsing an angle string given in signed degrees, minutes and seconds, e.g. -80° 7' 30\"
 (def dms-pattern #"(\+|-)?(\d+)°\s*(?:(\d+)'\s*(?:(\d+(?:\.\d+)?)\")?)?")

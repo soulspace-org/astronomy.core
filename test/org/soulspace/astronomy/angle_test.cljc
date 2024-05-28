@@ -12,9 +12,10 @@
 
 (ns org.soulspace.astronomy.angle-test
   (:require [clojure.test :refer :all]
-            [org.soulspace.math.core :as m]
             [org.soulspace.astronomy.test-utils :as utils]
             [org.soulspace.astronomy.angle :as angle]))
+#?(:clj (require '[clojure.math :as m])
+   :cljs (require '[cljs.math :as m]))
 
 (deftest dms-to-deg-test
   (is (= 180.0     (angle/dms-to-deg "+180°")))
